@@ -8,7 +8,7 @@ public class Customer extends Person{
     private String city;
     private List<Order> orders = new ArrayList<>();
 
-    public Customer(String firstName, String lastName, int phoneNumber, String email,String streetAddress,String city) {
+    public Customer(String firstName, String lastName, String phoneNumber, String email, String streetAddress, String city) {
         super(firstName, lastName, phoneNumber, email);
         this.streetAddress = streetAddress;
         this.city = city;

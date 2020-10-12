@@ -1,6 +1,8 @@
 package shekho.com.guitarShopFX;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -12,6 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import shekho.com.guitarShopFX.DAL.Database;
+import shekho.com.guitarShopFX.Models.User;
+import shekho.com.guitarShopFX.UI.Windows.Home;
 
 public class Login extends Application {
 
@@ -20,6 +25,8 @@ public class Login extends Application {
     public void start(Stage window) throws Exception {
 
         try{
+            Database db = new Database();
+
             window.setTitle("GuitarShop FX - Login");
             Image image = new Image("resources/css/images/guitarImage.png");
             window.getIcons().add(image);
@@ -66,9 +73,34 @@ public class Login extends Application {
             center.add(btnLogin, 1, 3);
             center.add(lblMessage, 1, 4);
 
-            
+            btnLogin.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
 
+                    String usernameInput = txtUserName.getText();
+                    String passwordInput = pf.getText();
 
+                    if(!usernameInput.isEmpty() && !passwordInput.isEmpty()){
+
+                        User user = db.validateAuthentication(usernameInput,passwordInput);
+
+                        if(user != null){
+
+                            Home home = new Home(db,user);
+                            home.getWindow().show();
+                            window.close();
+                        }else{
+                            lblMessage.setText("The username of the password isn't correct");
+                        }
+                    }else{
+                        lblMessage.setText("don't leave the fields empty!");
+                    }
+
+                    txtUserName.setText("");
+                    pf.setText("");
+
+                }
+            });
 
             layout.setTop(top);
             layout.setCenter(center);

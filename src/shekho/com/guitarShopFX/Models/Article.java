@@ -12,7 +12,7 @@ public class Article {
 
     private int counter = 0;
 
-    public Article(String brand, String model, boolean acoustic, TypeGuitar type, double price, int quantity, int counter) {
+    public Article(String brand, String model, boolean acoustic, TypeGuitar type, double price, int quantity) {
         id = getId();
         this.brand = brand;
         this.model = model;
@@ -20,7 +20,6 @@ public class Article {
         this.type = type;
         this.price = price;
         this.quantity = quantity;
-        this.counter = counter;
     }
 
     public String getBrand() {

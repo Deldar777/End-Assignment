@@ -3,10 +3,10 @@ package shekho.com.guitarShopFX.Models;
 public class Person {
     private String firstName;
     private String lastName;
-    private int phoneNumber;
+    private String phoneNumber;
     private String email;
 
-    public Person(String firstName, String lastName, int phoneNumber, String email) {
+    public Person(String firstName, String lastName, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -21,7 +21,7 @@ public class Person {
         return lastName;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
