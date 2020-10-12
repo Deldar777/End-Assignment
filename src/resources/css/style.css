@@ -23,3 +23,7 @@
     -fx-text-fill: white;
     -fx-font-size: 16px;
 }
+#lblWarning{
+    -fx-text-fill: Red;
+    -fx-font-size: 16px;
+}

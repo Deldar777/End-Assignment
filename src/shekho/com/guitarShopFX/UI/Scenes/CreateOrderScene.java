@@ -1,21 +1,34 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import shekho.com.guitarShopFX.DAL.Database;
+import shekho.com.guitarShopFX.Models.Article;
+import shekho.com.guitarShopFX.Models.Customer;
 import shekho.com.guitarShopFX.Models.Order;
 import  javafx.scene.control.*;
+import shekho.com.guitarShopFX.UI.Dialogs.AddArticlesDialog;
 import shekho.com.guitarShopFX.UI.Dialogs.ChooseCustomerDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CreateOrderScene {
 
+    private ObservableList<Article> olArticles;
+    private List<Article> articles = new ArrayList<>();
     private Order order;
     private Scene scene;
     private int orderNumber;
@@ -31,6 +44,7 @@ public class CreateOrderScene {
     }
 
     public CreateOrderScene(Database db){
+
 
         VBox layout = new VBox();
         layout.setPadding(new Insets(20));
@@ -58,6 +72,7 @@ public class CreateOrderScene {
 
         GridPane gpCustomerFields = new GridPane();
         gpCustomerFields.setId("backGroundCustomer");
+        gpCustomerFields.setMinWidth(300);
         gpCustomerFields.setHgap(30);
         gpCustomerFields.setVgap(10);
 
@@ -110,16 +125,37 @@ public class CreateOrderScene {
             }
         });
 
-        TableView tArticles = new TableView();
+        TableView<Article> articlesTable = new TableView<>();
+        articlesTable.setEditable(true);
+        articlesTable.getSelectionModel().setCellSelectionEnabled(false);
+        articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn colQuantity = new TableColumn("Quantity");
-        TableColumn colBrand = new TableColumn("Brand");
-        TableColumn colModel = new TableColumn("Model");
-        TableColumn colAcoustic = new TableColumn("Acoustic");
-        TableColumn colType = new TableColumn("Type");
-        TableColumn colPrice = new TableColumn("Price");
+        TableColumn numberCol = new TableColumn("Quantity");
+        numberCol.setMinWidth(100);
+        numberCol.setCellValueFactory(new PropertyValueFactory<Article, Integer>("number"));
 
-        tArticles.getColumns().addAll(colQuantity,colBrand,colModel,colAcoustic,colType,colPrice);
+        TableColumn brandCol = new TableColumn("Brand");
+        brandCol.setMinWidth(100);
+        brandCol.setCellValueFactory(new PropertyValueFactory<Article, String>("brand"));
+
+        TableColumn modelCol = new TableColumn("Model");
+        modelCol.setMinWidth(100);
+        modelCol.setCellValueFactory(new PropertyValueFactory<Article, String>("Model"));
+
+        TableColumn acousticCol = new TableColumn("Acoustic");
+        acousticCol.setMinWidth(100);
+        acousticCol.setCellValueFactory(new PropertyValueFactory<Article, String>("acoustic"));
+
+        TableColumn typeCol = new TableColumn("Type");
+        typeCol.setMinWidth(100);
+        typeCol.setCellValueFactory(new PropertyValueFactory<Article, String>("type"));
+
+        TableColumn priceCol = new TableColumn("Price");
+        priceCol.setMinWidth(100);
+        priceCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("price"));
+
+        articlesTable.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
+
 
         HBox buttonsLayout = new HBox();
         buttonsLayout.setSpacing(20);
@@ -130,9 +166,23 @@ public class CreateOrderScene {
         Button confirmBtn = new Button("Confirm");
         Button resetBtn = new Button("Reset");
 
+        addBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                AddArticlesDialog addArticlesDialog = new AddArticlesDialog(db);
+                addArticlesDialog.getWindow().showAndWait();
+
+                if(addArticlesDialog.getArticle() != null){
+                    articles.add(addArticlesDialog.getArticle());
+                    olArticles = FXCollections.observableArrayList(articles);
+                    articlesTable.setItems(olArticles);
+                }
+            }
+        });
+
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
-        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,tArticles,buttonsLayout);
+        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout);
         scene = new Scene(layout);
     }
 }

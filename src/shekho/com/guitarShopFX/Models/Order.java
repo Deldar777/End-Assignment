@@ -13,6 +13,7 @@ public class Order {
     private double totalPrice;
 
 
+
     public Order(Customer customer, int quantity) {
         this.customer = customer;
         this.quantity = quantity;

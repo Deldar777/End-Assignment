@@ -9,6 +9,15 @@ public class Article {
     private TypeGuitar type;
     private double price;
     private int quantity;
+    private int number = 0;
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
     private int counter = 0;
 

@@ -42,7 +42,6 @@ public class ChooseCustomerDialog {
         window.getIcons().add(image);
 
 
-
         VBox layout = new VBox();
         layout.setPadding(new Insets(10,0,0,10));
         layout.setSpacing(5);
