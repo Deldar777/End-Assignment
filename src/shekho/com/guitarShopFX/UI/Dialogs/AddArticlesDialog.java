@@ -102,6 +102,7 @@ public class AddArticlesDialog {
                     article.setNumber(Integer.parseInt(txtNumbers.getText()));
 
                     if(article != null && article.getNumber() <= article.getQuantity()){
+                        article.setQuantity(article.getQuantity() - Integer.parseInt(txtNumbers.getText()));
                         window.close();
                     }else{
                         lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "

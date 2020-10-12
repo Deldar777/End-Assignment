@@ -9,6 +9,11 @@ public class Article {
     private TypeGuitar type;
     private double price;
     private int quantity;
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     private int number = 0;
 
     public int getNumber() {

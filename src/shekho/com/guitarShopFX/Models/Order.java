@@ -9,14 +9,15 @@ public class Order {
     private LocalDateTime date;
     private Customer customer;
     private int quantity;
-    private List<Article> articles = new ArrayList<>();
+    private List<Article> articles;
     private double totalPrice;
 
 
 
-    public Order(Customer customer, int quantity) {
+    public Order(Customer customer, int quantity,List<Article> articles) {
         this.customer = customer;
         this.quantity = quantity;
+        this.articles = articles;
         date = LocalDateTime.now();
         totalPrice = getTotalPrice();
     }

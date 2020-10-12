@@ -172,14 +172,37 @@ public class CreateOrderScene {
                 AddArticlesDialog addArticlesDialog = new AddArticlesDialog(db);
                 addArticlesDialog.getWindow().showAndWait();
 
-                if(addArticlesDialog.getArticle() != null){
-                    articles.add(addArticlesDialog.getArticle());
+                Article newArticle = addArticlesDialog.getArticle();
+
+                if(newArticle != null){
+
+                    articles.add(newArticle);
                     olArticles = FXCollections.observableArrayList(articles);
                     articlesTable.setItems(olArticles);
                 }
             }
         });
 
+        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Article article = articlesTable.getSelectionModel().getSelectedItem();
+
+                if(article != null){
+                    article.setQuantity(article.getQuantity() + article.getNumber());
+                    articles.remove(article);
+                    olArticles = FXCollections.observableArrayList(articles);
+                    articlesTable.setItems(olArticles);
+                }
+            }
+        });
+
+        confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                
+            }
+        });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
         layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout);
