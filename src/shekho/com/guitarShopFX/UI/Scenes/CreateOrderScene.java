@@ -1,5 +1,7 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,7 +11,7 @@ import javafx.scene.layout.VBox;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Order;
 import  javafx.scene.control.*;
-
+import shekho.com.guitarShopFX.UI.Dialogs.ChooseCustomerDialog;
 
 
 public class CreateOrderScene {
@@ -55,8 +57,8 @@ public class CreateOrderScene {
         searchLayout.getChildren().addAll(txtSearch,btnSearch);
 
         GridPane gpCustomerFields = new GridPane();
-        gpCustomerFields.setId("backGround");
-        gpCustomerFields.setHgap(100);
+        gpCustomerFields.setId("backGroundCustomer");
+        gpCustomerFields.setHgap(30);
         gpCustomerFields.setVgap(10);
 
         Label lblFirstName = new Label("First name");
@@ -89,6 +91,24 @@ public class CreateOrderScene {
         gpCustomerFields.add(lblEmailAddressEmpty,3,2);
 
         search_customerFields.getChildren().addAll(searchLayout,gpCustomerFields);
+
+        btnSearch.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ChooseCustomerDialog customerDialog = new ChooseCustomerDialog(db);
+                customerDialog.getWindow().showAndWait();
+
+                if(customerDialog.getCustomer() != null){
+
+                    lblFirstNameEmpty.setText(customerDialog.getCustomer().getFirstName());
+                    lblLastNameEmpty.setText(customerDialog.getCustomer().getLastName());
+                    lblStreetAddressEmpty.setText(customerDialog.getCustomer().getStreetAddress());
+                    lblCityEmpty.setText(customerDialog.getCustomer().getCity());
+                    lblEmailAddressEmpty.setText(customerDialog.getCustomer().getEmail());
+                    lblPhoneNumberEmpty.setText(customerDialog.getCustomer().getPhoneNumber());
+                }
+            }
+        });
 
         TableView tArticles = new TableView();
 

@@ -34,8 +34,8 @@ public class Home {
         window.setTitle("GuitarShop FX - Dashboard");
         Image image = new Image("resources/css/images/guitarImage.png");
         window.getIcons().add(image);
-        window.setWidth(1200);
-        window.setHeight(800);
+        window.setWidth(1000);
+        window.setHeight(700);
 
         VBox layout = new VBox();
         layout.setPadding(new Insets(0,10,40,10));
@@ -65,6 +65,7 @@ public class Home {
                 CreateOrderScene createOrderScene = new CreateOrderScene(db);
                 layout.getChildren().remove(1);
                 layout.getChildren().add(createOrderScene.getScene().getRoot());
+                window.setTitle("GuitarShop FX - Create an Order");
             }
         });
 

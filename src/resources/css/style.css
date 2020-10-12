@@ -1,6 +1,5 @@
 .root{
     -fx-background-color: #A7C8F2;
-
 }
 #lblLogin{
     -fx-font: 50px Tahoma;
@@ -10,6 +9,10 @@
 }
 #backGround{
     -fx-font: 20px Tahoma;
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, mediumblue 50%)
+}
+#backGroundCustomer{
+    -fx-font: 10px Tahoma;
     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, mediumblue 50%)
 }
 #lblWelcome{

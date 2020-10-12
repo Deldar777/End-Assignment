@@ -25,12 +25,12 @@ public class Database {
                 "Erfmann","06-12345678","ryan.erfmann@hotmail.com",Role.SALES));
     }
     private void createCustomers(){
-        customers.add(new Customer("Wim","Wiltenburg","06-87654321",
-                "wim.wiltenburg@hotmail.com","Stentorstraat 90","Amsterdam"));
-        customers.add(new Customer("Jack","Traven","06-87651234",
-                "jack.draven@hotmail.com","Dorpsstraat 10","Arnhem"));
-        customers.add(new Customer("Genny","Gamp","06-12399765",
-                "genny.gamp@hotmail.com","Churchillallee 141","Den Haag"));
+        customers.add(new Customer("Wim","Wiltenburg","Stentorstraat 90",
+                "Amsterdam","06-87654321"," wim.wiltenburg@hotmail.com"));
+        customers.add(new Customer("Jack","Traven","Dorpsstraat 10",
+                "Arnhem ","06-87651234","jack.draven@hotmail.com"));
+        customers.add(new Customer("Genny","Gamp","Churchillallee 141",
+                "Den Haag","06-12399765 ","genny.gamp@hotmail.com"));
 
     }
     private void createArticles(){
