@@ -12,19 +12,12 @@ public class Order {
     private List<Article> articles = new ArrayList<>();
     private double totalPrice;
 
-    private int counter = 0;
 
     public Order(Customer customer, int quantity) {
         this.customer = customer;
         this.quantity = quantity;
         date = LocalDateTime.now();
-        orderNumber = getOrderNumber();
         totalPrice = getTotalPrice();
-    }
-
-    public int getOrderNumber(){
-        counter++;
-        return counter;
     }
 
     private double getTotalPrice(){
@@ -40,6 +33,9 @@ public class Order {
         return total;
     }
 
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
     public int getQuantity() {
         return quantity;

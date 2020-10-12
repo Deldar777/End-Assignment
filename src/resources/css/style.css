@@ -8,11 +8,15 @@
     -fx-stroke: black;
     -fx-stroke-width: 1;
 }
-#menuBar{
+#backGround{
     -fx-font: 20px Tahoma;
     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, mediumblue 50%)
 }
 #lblWelcome{
     -fx-text-fill: white;
-    -fx-font-size: 60px;
+    -fx-font-size: 50px;
+}
+#lbl{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
 }
