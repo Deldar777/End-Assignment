@@ -16,7 +16,7 @@
     -fx-font: 10px Tahoma;
     -fx-background-color: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, mediumblue 50%)
 }
-#lblWelcome{
+#headerLbl{
     -fx-text-fill: white;
     -fx-font-size: 50px;
 }

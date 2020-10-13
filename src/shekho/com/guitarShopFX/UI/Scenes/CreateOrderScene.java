@@ -50,7 +50,7 @@ public class CreateOrderScene {
         layout.setSpacing(10);
 
         Label lblCreateOrder = new Label("Create Order #" + getOrderNumber());
-        lblCreateOrder.setId("lblWelcome");
+        lblCreateOrder.setId("headerLbl");
         Label lblCustomer = new Label("Customer");
         lblCustomer.setId("lbl");
         Label lblArticles = new Label("Articles");

@@ -15,6 +15,7 @@ import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Role;
 import shekho.com.guitarShopFX.Models.User;
 import shekho.com.guitarShopFX.UI.Scenes.CreateOrderScene;
+import shekho.com.guitarShopFX.UI.Scenes.ManageStockScene;
 import shekho.com.guitarShopFX.UI.Scenes.OrderListScene;
 
 import java.time.LocalDateTime;
@@ -44,20 +45,24 @@ public class Home {
 
         MenuBar menuBar = new MenuBar();
         menuBar.setPrefHeight(20);
+
         Menu menuHome = new Menu("Home");
         Menu menuSales = new Menu("Sales");
+        Menu menuStock = new Menu("Stock");
         MenuItem listOrdersItem = new MenuItem("Orders");
-        MenuItem maintainItem = new MenuItem("Maintain Stock");
         MenuItem createOrderItem = new MenuItem("Create Order");
+        MenuItem manageStockItem = new MenuItem("Manage Stock");
 
-        //determine which menuitem add to menubar depends on the user role
+        menuSales.getItems().add(listOrdersItem);
+        menuBar.getMenus().addAll(menuHome,menuSales);
+
+        //determine which menu and menuitem add to menubar depends on the user role
         if(user.getRole() == Role.MANAGER){
-            menuSales.getItems().add(maintainItem);
+            menuBar.getMenus().add(menuStock);
+            menuStock.getItems().add(manageStockItem);
         }else {
             menuSales.getItems().add(createOrderItem);
         }
-        menuSales.getItems().add(listOrdersItem);
-        menuBar.getMenus().addAll(menuHome,menuSales);
 
 
         createOrderItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -80,6 +85,16 @@ public class Home {
             }
         });
 
+        manageStockItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ManageStockScene mss = new ManageStockScene(db);
+                layout.getChildren().remove(1);
+                layout.getChildren().add(mss.getScene().getRoot());
+                window.setTitle("GuitarShop FX - Stock Maintenance");
+            }
+        });
+
         VBox labelsLayout = new VBox();
         labelsLayout.setSpacing(50);
 
@@ -91,7 +106,7 @@ public class Home {
         labelsLayout.getChildren().addAll(lblWelcome,lblUserRole,lblTime);
 
         menuBar.setId("backGround");
-        lblWelcome.setId("lblWelcome");
+        lblWelcome.setId("headerLbl");
 
         layout.getChildren().addAll(menuBar,labelsLayout);
 

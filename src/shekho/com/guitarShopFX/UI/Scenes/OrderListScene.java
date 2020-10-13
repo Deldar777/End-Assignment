@@ -12,7 +12,6 @@ import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
 import shekho.com.guitarShopFX.Models.Order;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class OrderListScene {
@@ -35,8 +34,8 @@ public class OrderListScene {
 
         Label lblOrderList = new Label("Order List");
         Label lblDetails = new Label("Details");
-        lblOrderList.setId("lblWelcome");
-        lblDetails.setId("lblWelcome");
+        lblOrderList.setId("headerLbl");
+        lblDetails.setId("headerLbl");
 
         TableView<Order> tbOrder = new TableView<>();
         tbOrder.setEditable(true);
