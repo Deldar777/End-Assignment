@@ -1,6 +1,11 @@
 package shekho.com.guitarShopFX.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class Article {
+
 
     private int id;
     private String brand;
@@ -9,12 +14,13 @@ public class Article {
     private TypeGuitar type;
     private double price;
     private int quantity;
+    private int number;
+
+    private int counter = 32324;
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-    private int number = 0;
 
     public int getNumber() {
         return number;
@@ -24,16 +30,16 @@ public class Article {
         this.number = number;
     }
 
-    private int counter = 0;
 
     public Article(String brand, String model, boolean acoustic, TypeGuitar type, double price, int quantity) {
-        id = getId();
+
         this.brand = brand;
         this.model = model;
         this.acoustic = acoustic;
         this.type = type;
         this.price = price;
         this.quantity = quantity;
+        id = getId();
     }
 
     public String getBrand() {

@@ -1,5 +1,7 @@
 package shekho.com.guitarShopFX.UI.Dialogs;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,8 +11,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.Order;
 
 import java.util.List;
 
@@ -22,7 +26,7 @@ public class ConfirmOrderDialog {
         return window;
     }
 
-    public ConfirmOrderDialog(int orderNumber, Customer customer, List<Article> articleList){
+    public ConfirmOrderDialog(Database db, int orderNumber, Customer customer, List<Article> articleList){
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Confirm Order");
@@ -92,6 +96,16 @@ public class ConfirmOrderDialog {
         totalPriceLayout.getChildren().addAll(lblTotalPriceTitle,lblTotalPrice);
 
         Button btnConfirm = new Button("Confirm");
+
+        btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Order order = new Order(customer,articleList,orderNumber);
+                db.setOrders(order);
+
+                window.close();
+            }
+        });
 
         layout.getChildren().addAll(totalPriceLayout,btnConfirm);
         Scene scene = new Scene(layout);

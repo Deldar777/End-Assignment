@@ -7,6 +7,16 @@ import java.util.List;
 
 public class Database {
 
+    private List<Order> orders = new ArrayList<>();
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Order order) {
+        orders.add(order);
+    }
+
     private List<User> users = new ArrayList<>();
     private List<Customer> customers = new ArrayList<>();
     private List<Article> articles = new ArrayList<>();

@@ -11,15 +11,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
-import shekho.com.guitarShopFX.Models.Order;
 import  javafx.scene.control.*;
-import shekho.com.guitarShopFX.UI.Dialogs.AddArticlesDialog;
-import shekho.com.guitarShopFX.UI.Dialogs.ChooseCustomerDialog;
-import shekho.com.guitarShopFX.UI.Dialogs.ConfirmOrderDialog;
+import shekho.com.guitarShopFX.UI.Dialogs.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +29,7 @@ public class CreateOrderScene {
     private Scene scene;
     private Customer customer;
     private int counter = 1000000;
+    private List<Label> customersLbl;
 
 
 
@@ -46,7 +44,7 @@ public class CreateOrderScene {
 
     public CreateOrderScene(Database db){
 
-
+        customersLbl = new ArrayList<>();
         VBox layout = new VBox();
         layout.setPadding(new Insets(20));
         layout.setSpacing(10);
@@ -129,6 +127,13 @@ public class CreateOrderScene {
                     lblCityEmpty.setText(customerDialog.getCustomer().getCity());
                     lblEmailAddressEmpty.setText(customerDialog.getCustomer().getEmail());
                     lblPhoneNumberEmpty.setText(customerDialog.getCustomer().getPhoneNumber());
+
+                    customersLbl.add(lblFirstNameEmpty);
+                    customersLbl.add(lblLastNameEmpty);
+                    customersLbl.add(lblStreetAddressEmpty);
+                    customersLbl.add(lblCityEmpty);
+                    customersLbl.add(lblEmailAddressEmpty);
+                    customersLbl.add(lblPhoneNumberEmpty);
                 }
             }
         });
@@ -218,12 +223,23 @@ public class CreateOrderScene {
                 lblWarning.setText("");
 
                 if(customer != null && !articles.isEmpty()){
-                    ConfirmOrderDialog cod = new ConfirmOrderDialog(getOrderNumber(),customer,articles);
+                    ConfirmOrderDialog cod = new ConfirmOrderDialog(db,getOrderNumber(),customer,articles);
                     cod.getWindow().showAndWait();
                     //cod.getWindow().initModality(Modality.APPLICATION_MODAL);
                 }else{
                     lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
                 }
+
+
+                customer = null;
+                for (Label l:customersLbl
+                     ) {
+                    l.setText("");
+                }
+
+                articles = new ArrayList<>();
+                olArticles = FXCollections.observableArrayList(articles);
+                articlesTable.setItems(olArticles);
             }
         });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);

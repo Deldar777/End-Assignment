@@ -15,6 +15,7 @@ import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Role;
 import shekho.com.guitarShopFX.Models.User;
 import shekho.com.guitarShopFX.UI.Scenes.CreateOrderScene;
+import shekho.com.guitarShopFX.UI.Scenes.OrderListScene;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -66,6 +67,16 @@ public class Home {
                 layout.getChildren().remove(1);
                 layout.getChildren().add(createOrderScene.getScene().getRoot());
                 window.setTitle("GuitarShop FX - Create an Order");
+            }
+        });
+
+        listOrdersItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                OrderListScene ols = new OrderListScene(db);
+                layout.getChildren().remove(1);
+                layout.getChildren().add(ols.getScene().getRoot());
+                window.setTitle("GuitarShop FX - View Order List");
             }
         });
 
