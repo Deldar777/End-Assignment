@@ -1,5 +1,6 @@
 .root{
     -fx-background-color: #A7C8F2;
+    -fx-text-fill: white;
 }
 #lblLogin{
     -fx-font: 50px Tahoma;
@@ -21,7 +22,7 @@
 }
 #lbl{
     -fx-text-fill: white;
-    -fx-font-size: 16px;
+    -fx-font-size: 12px;
 }
 #lblWarning{
     -fx-text-fill: Red;

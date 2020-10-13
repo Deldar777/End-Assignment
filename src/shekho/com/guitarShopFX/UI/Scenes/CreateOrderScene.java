@@ -1,8 +1,6 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
@@ -20,6 +19,7 @@ import shekho.com.guitarShopFX.Models.Order;
 import  javafx.scene.control.*;
 import shekho.com.guitarShopFX.UI.Dialogs.AddArticlesDialog;
 import shekho.com.guitarShopFX.UI.Dialogs.ChooseCustomerDialog;
+import shekho.com.guitarShopFX.UI.Dialogs.ConfirmOrderDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +29,13 @@ public class CreateOrderScene {
 
     private ObservableList<Article> olArticles;
     private List<Article> articles = new ArrayList<>();
-    private Order order;
     private Scene scene;
-    private int orderNumber;
+    private Customer customer;
     private int counter = 1000000;
 
-    public int createOrderNumber(){
+
+
+    public int getOrderNumber(){
         counter++;
         return counter;
     }
@@ -50,7 +51,7 @@ public class CreateOrderScene {
         layout.setPadding(new Insets(20));
         layout.setSpacing(10);
 
-        Label lblCreateOrder = new Label("Create Order #" + createOrderNumber());
+        Label lblCreateOrder = new Label("Create Order #" + getOrderNumber());
         lblCreateOrder.setId("lblWelcome");
         Label lblCustomer = new Label("Customer");
         lblCustomer.setId("lbl");
@@ -78,16 +79,22 @@ public class CreateOrderScene {
 
         Label lblFirstName = new Label("First name");
         Label lblFirstNameEmpty = new Label();
+        lblFirstNameEmpty.setId("lbl");
         Label lblLastName = new Label("Last name");
         Label lblLastNameEmpty = new Label();
+        lblLastNameEmpty.setId("lbl");
         Label lblStreetAddress = new Label("Street address");
         Label lblStreetAddressEmpty = new Label();
+        lblStreetAddressEmpty.setId("lbl");
         Label lblCity = new Label("City");
         Label lblCityEmpty = new Label();
+        lblCityEmpty.setId("lbl");
         Label lblPhoneNUmber = new Label("Phone number");
         Label lblPhoneNumberEmpty = new Label();
+        lblPhoneNumberEmpty.setId("lbl");
         Label lblEmailAddress = new Label("Email address");
         Label lblEmailAddressEmpty = new Label();
+        lblEmailAddressEmpty.setId("lbl");
 
         //first row
         gpCustomerFields.add(lblFirstName,0,0);
@@ -113,7 +120,8 @@ public class CreateOrderScene {
                 ChooseCustomerDialog customerDialog = new ChooseCustomerDialog(db);
                 customerDialog.getWindow().showAndWait();
 
-                if(customerDialog.getCustomer() != null){
+                customer = customerDialog.getCustomer();
+                if(customer != null){
 
                     lblFirstNameEmpty.setText(customerDialog.getCustomer().getFirstName());
                     lblLastNameEmpty.setText(customerDialog.getCustomer().getLastName());
@@ -165,20 +173,25 @@ public class CreateOrderScene {
         Button deleteBtn = new Button("Delete");
         Button confirmBtn = new Button("Confirm");
         Button resetBtn = new Button("Reset");
+        Label lblWarning = new Label();
+        lblWarning.setId("lblWarning");
 
         addBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                lblWarning.setText("");
                 AddArticlesDialog addArticlesDialog = new AddArticlesDialog(db);
                 addArticlesDialog.getWindow().showAndWait();
 
-                Article newArticle = addArticlesDialog.getArticle();
-
-                if(newArticle != null){
-
-                    articles.add(newArticle);
-                    olArticles = FXCollections.observableArrayList(articles);
-                    articlesTable.setItems(olArticles);
+                if(addArticlesDialog.getArticle() != null && addArticlesDialog.getArticle().getNumber() != 0){
+                    if(articles.contains(addArticlesDialog.getArticle())){
+                        lblWarning.setText("You have chosen this item already");
+                        addArticlesDialog.getArticle().setQuantity(addArticlesDialog.getArticle().getQuantity() + addArticlesDialog.getArticle().getNumber());
+                    }else{
+                        articles.add(addArticlesDialog.getArticle());
+                        olArticles = FXCollections.observableArrayList(articles);
+                        articlesTable.setItems(olArticles);
+                    }
                 }
             }
         });
@@ -193,6 +206,8 @@ public class CreateOrderScene {
                     articles.remove(article);
                     olArticles = FXCollections.observableArrayList(articles);
                     articlesTable.setItems(olArticles);
+                }else{
+                    lblWarning.setText("you did not choose any item! choose item and then press add");
                 }
             }
         });
@@ -200,12 +215,20 @@ public class CreateOrderScene {
         confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                
+                lblWarning.setText("");
+
+                if(customer != null && !articles.isEmpty()){
+                    ConfirmOrderDialog cod = new ConfirmOrderDialog(getOrderNumber(),customer,articles);
+                    cod.getWindow().showAndWait();
+                    //cod.getWindow().initModality(Modality.APPLICATION_MODAL);
+                }else{
+                    lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
+                }
             }
         });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
-        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout);
+        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout,lblWarning);
         scene = new Scene(layout);
     }
 }

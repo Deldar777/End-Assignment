@@ -27,8 +27,12 @@ public class AddArticlesDialog {
     private ObservableList<Article> olArticles;
     private Article article;
     private Stage window;
-    private Scene scene;
 
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    private Scene scene;
     public Stage getWindow() {
         return window;
     }
@@ -99,22 +103,24 @@ public class AddArticlesDialog {
                 try{
 
                     article = articlesTable.getSelectionModel().getSelectedItem();
-                    article.setNumber(Integer.parseInt(txtNumbers.getText()));
 
-                    if(article != null && article.getNumber() <= article.getQuantity()){
-                        article.setQuantity(article.getQuantity() - Integer.parseInt(txtNumbers.getText()));
-                        window.close();
-                    }else{
-                        lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "
-                                +article.getQuantity()+ " remaining");
+                    if(article != null){
+
+                        if(Integer.parseInt(txtNumbers.getText()) <= article.getQuantity()){
+
+                            article.setNumber(Integer.parseInt(txtNumbers.getText()));
+                            article.setQuantity(article.getQuantity() - Integer.parseInt(txtNumbers.getText()));
+                            window.close();
+                        }else{
+                            lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "
+                                    +article.getQuantity()+ " remaining");
+                        }
+                    }else {
+                        lblWarning.setText("you did not choose any item! choose item and then press add");
                     }
-
                 }catch (Exception e){
                     lblWarning.setText(e.getMessage());
                 }
-
-
-
             }
         });
 
