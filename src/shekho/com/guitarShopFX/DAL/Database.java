@@ -44,10 +44,10 @@ public class Database {
 
     }
     private void createArticles(){
-        articles.add(new Article("Fender","Telecaster",false,TypeGuitar.REGULAR,1079.79,10));
-        articles.add(new Article("Fender","Precision",false,TypeGuitar.BASS,1300.49,10));
+        articles.add(new Article("Fender","Telecaster",false,TypeGuitar.REGULAR,1079.79,10,"d637fhs"));
+        articles.add(new Article("Fender","Precision",false,TypeGuitar.BASS,1300.49,10,"jg746v"));
         articles.add(new Article("Simon Patrick","Pro Flame Maple",true,TypeGuitar.REGULAR,1079.79,
-                10));
+                10,"nbm7563"));
     }
 
 
@@ -65,7 +65,6 @@ public class Database {
 
     public User validateAuthentication(String username,String password){
         User user;
-
         for (User u:users
         ) {
 

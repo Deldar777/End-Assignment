@@ -7,31 +7,17 @@ import java.util.Random;
 public class Article {
 
 
-    private int id;
+
     private String brand;
     private String model;
     private boolean acoustic;
     private TypeGuitar type;
     private double price;
     private int quantity;
-    private int number;
-
-    private int counter = 32324;
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
+    private String id;
 
 
-    public Article(String brand, String model, boolean acoustic, TypeGuitar type, double price, int quantity) {
+    public Article(String brand, String model, boolean acoustic, TypeGuitar type, double price, int quantity,String id) {
 
         this.brand = brand;
         this.model = model;
@@ -39,37 +25,28 @@ public class Article {
         this.type = type;
         this.price = price;
         this.quantity = quantity;
-        id = getId();
+        this.id = id;
     }
 
     public String getBrand() {
         return brand;
     }
-
     public String getModel() {
         return model;
     }
-
-    public boolean isAcoustic() {
-        return acoustic;
-    }
-
     public TypeGuitar getType() {
         return type;
     }
-
     public double getPrice() {
         return price;
     }
-
     public int getQuantity() {
         return quantity;
     }
-
-
-    public int getId(){
-        counter++;
-        return counter;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
-
+    public boolean isAcoustic() {
+        return acoustic;
+    }
 }

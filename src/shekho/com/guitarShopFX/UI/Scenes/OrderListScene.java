@@ -1,5 +1,6 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -51,21 +52,21 @@ public class OrderListScene {
         dateCol.setMinWidth(100);
         dateCol.setCellValueFactory(new PropertyValueFactory<Order, String>("date"));
 
-        TableColumn customerNameCol = new TableColumn("Customer Name");
+        TableColumn<Order,String> customerNameCol = new TableColumn("Customer Name");
         customerNameCol.setMinWidth(100);
-        customerNameCol.setCellValueFactory(new PropertyValueFactory<Order, String>("name"));
+        customerNameCol.setCellValueFactory(o -> new SimpleStringProperty(o.getValue().getCustomer().getFullName()));
 
-        TableColumn cityCol = new TableColumn("City");
+        TableColumn<Order,String> cityCol = new TableColumn("City");
         cityCol.setMinWidth(100);
-        cityCol.setCellValueFactory(new PropertyValueFactory<Order, String>("city"));
+        cityCol.setCellValueFactory(o -> new SimpleStringProperty(o.getValue().getCustomer().getCity()));
 
-        TableColumn phoneNumberCol = new TableColumn("Phone #");
+        TableColumn<Order,String> phoneNumberCol = new TableColumn("Phone #");
         phoneNumberCol.setMinWidth(100);
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Order, String>("phone"));
+        phoneNumberCol.setCellValueFactory(o -> new SimpleStringProperty(o.getValue().getCustomer().getPhoneNumber()));
 
-        TableColumn emailCol = new TableColumn("E-mail Address");
+        TableColumn<Order,String> emailCol = new TableColumn("E-mail Address");
         emailCol.setMinWidth(200);
-        emailCol.setCellValueFactory(new PropertyValueFactory<Order, String>("email"));
+        emailCol.setCellValueFactory(o -> new SimpleStringProperty(o.getValue().getCustomer().getEmail()));
 
         TableColumn countCol = new TableColumn("Count");
         countCol.setMinWidth(50);
@@ -114,7 +115,7 @@ public class OrderListScene {
 
         tbArticles.getColumns().addAll(idCol,brandCol,modelCol,acousticCol,typeCol,priceCol,quantityCol);
 
-        tbOrder.setRowFactory(stv ->{
+       /* tbOrder.setRowFactory(stv ->{
             TableRow<Order> row = new TableRow<>();
             row.setOnMouseClicked(event ->{
                 if(event.getClickCount() == 2 && !row.isEmpty()){
@@ -126,7 +127,7 @@ public class OrderListScene {
             });
 
             return row;
-        });
+        });*/
 
         layout.getChildren().addAll(lblOrderList,tbOrder,lblDetails,tbArticles);
         scene = new Scene(layout);

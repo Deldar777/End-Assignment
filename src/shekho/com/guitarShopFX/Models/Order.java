@@ -2,6 +2,7 @@ package shekho.com.guitarShopFX.Models;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class Order {
 
@@ -9,63 +10,30 @@ public class Order {
     private String date;
     private Customer customer;
     private int quantity;
-    private List<Article> articles;
+    private Map<Article,Integer> articles;
     private int count;
     private double totalPrice;
 
-    private String name;
-    private String city;
-    private String phone;
-    private String email;
 
-    public String getEmail() {
-        return email;
-    }
+    private int orderCounter = 100;
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getCustomerName() {
-        return name;
-    }
-
-    public int getOrderNumber() {
-        return orderNumber;
-    }
 
     public String getDate() {
         return date;
     }
-
     public Customer getCustomer() {
         return customer;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public Order(Customer customer, List<Article> articles, int orderNumber) {
-        this.customer = customer;
-        this.articles = articles;
-        this.orderNumber = orderNumber;
+    public Order() {
 
         date = LocalDate.now().toString();
         quantity = getQuantity();
-        name = customer.getFullName();
-        city = customer.getCity();
-        email = customer.getEmail();
-        phone = customer.getPhoneNumber();
         count = getCount();
-        totalPrice = getTotalPrice();
+        //totalPrice = getTotalPrice();
     }
 
-    public double getTotalPrice(){
+    /*public double getTotalPrice(){
 
         double total = 0;
         for (Article a:articles
@@ -74,6 +42,11 @@ public class Order {
         }
 
         return total;
+    }*/
+
+    public int getOrderNumber() {
+        orderCounter++;
+        return orderCounter;
     }
 
     public int getQuantity() {
@@ -87,7 +60,7 @@ public class Order {
     public int getCount(){
        return articles.size();
     }
-    public List<Article> getArticles() {
+    public Map<Article,Integer> getArticles() {
         return articles;
     }
 }

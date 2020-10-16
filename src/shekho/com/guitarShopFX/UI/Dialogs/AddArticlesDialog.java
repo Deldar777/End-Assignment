@@ -22,24 +22,20 @@ import java.util.List;
 
 public class AddArticlesDialog {
 
-
-
+    private Scene scene;
     private ObservableList<Article> olArticles;
     private Article article;
+    private int amount;
     private Stage window;
 
-    public void setArticle(Article article) {
-        this.article = article;
-    }
 
-    private Scene scene;
     public Stage getWindow() {
         return window;
     }
     public Article getArticle() {
         return article;
     }
-
+    public int getAmount() { return amount; }
 
     public AddArticlesDialog(Database db){
 
@@ -103,14 +99,15 @@ public class AddArticlesDialog {
                 try{
 
                     article = articlesTable.getSelectionModel().getSelectedItem();
+                    amount = Integer.parseInt(txtNumbers.getText());
 
                     if(article != null){
 
-                        if(Integer.parseInt(txtNumbers.getText()) <= article.getQuantity()){
+                        if(amount <= article.getQuantity()){
 
-                            article.setNumber(Integer.parseInt(txtNumbers.getText()));
                             article.setQuantity(article.getQuantity() - Integer.parseInt(txtNumbers.getText()));
                             window.close();
+
                         }else{
                             lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "
                                     +article.getQuantity()+ " remaining");
