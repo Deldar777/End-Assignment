@@ -1,6 +1,7 @@
 package shekho.com.guitarShopFX.Models;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +11,7 @@ public class Order {
     private String date;
     private Customer customer;
     private int quantity;
-    private List<Article> articles;
+    private HashMap<Article,Integer> articles;
     private List<Integer> articlesNumber;
     private double totalPrice;
 
@@ -29,7 +30,7 @@ public class Order {
        return quantity = articlesNumber.size();
     }*/
 
-    public Order(Customer customer,List<Article> articles) {
+    public Order(Customer customer,HashMap<Article,Integer> articles) {
 
         this.articles = articles;
         this.customer = customer;
@@ -37,10 +38,10 @@ public class Order {
         orderNumber = createOrderNumber();
         date = LocalDate.now().toString();
         //quantity = setQuantity();
-        totalPrice = getTotalPrice();
+        //totalPrice = getTotalPrice();
     }
 
-    public double getTotalPrice(){
+   /* public double getTotalPrice(){
 
         double total = 0;
         for (Article a:articles
@@ -49,7 +50,7 @@ public class Order {
         }
 
         return total;
-    }
+    }*/
 
     public int getOrderNumber() {
         return orderNumber;
@@ -59,7 +60,7 @@ public class Order {
         return orderCounter;
     }
 
-    public int getQuantity() {
+   /* public int getQuantity() {
         int quantity = 0;
         for (Article a: articles
              ) {
@@ -68,7 +69,7 @@ public class Order {
             }
         }
         return quantity;
-    }
+    }*/
 
 
     public int getCount(){
@@ -79,17 +80,8 @@ public class Order {
         return articlesNumber;
     }
 
-    public List<Article> getArticles() {
+    public HashMap<Article,Integer> getArticles() {
         return articles;
     }
 
-    public Article getArticle(){
-        Article article = null;
-
-        for (Article a:articles
-             ) {
-            article = a;
-        }
-        return article;
-    }
 }

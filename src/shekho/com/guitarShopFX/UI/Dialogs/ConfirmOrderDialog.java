@@ -97,7 +97,7 @@ public class ConfirmOrderDialog {
 
         Button btnConfirm = new Button("Confirm");
 
-        btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
+        /*btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
 
@@ -108,7 +108,7 @@ public class ConfirmOrderDialog {
                 }
                 window.close();
             }
-        });
+        });*/
 
         layout.getChildren().addAll(totalPriceLayout,btnConfirm);
         Scene scene = new Scene(layout);

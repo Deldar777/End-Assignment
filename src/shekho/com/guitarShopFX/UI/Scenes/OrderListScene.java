@@ -121,7 +121,7 @@ public class OrderListScene {
             row.setOnMouseClicked(event ->{
                 if(event.getClickCount() == 2 && !row.isEmpty()){
                     Order order = row.getItem();
-                    olArticles = FXCollections.observableArrayList(order.getArticles());
+                    //olArticles = FXCollections.observableArrayList(order.getArticles());
                     tbArticles.setItems(olArticles);
                 }
             });

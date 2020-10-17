@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.cell.MapValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,15 +23,19 @@ import shekho.com.guitarShopFX.UI.Dialogs.*;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class CreateOrderScene {
 
-    private ObservableList<Article> olArticles;
-    private List<Article> articles = new ArrayList<>();
-    private List<Integer> articlesAmount;
+
+    private HashMap<Article,Integer> articles = new HashMap<>();
+    private ObservableList<Map<String, Object>> olArticles =
+    FXCollections.<Map<String, Object>>observableArrayList();
+
+
     private int amount;
 
 
@@ -147,33 +152,37 @@ public class CreateOrderScene {
         });
 
 
-        TableView<Article> articlesTable = new TableView<>();
+
+
+
+        TableView articlesTable = new TableView<>();
         articlesTable.setEditable(true);
         articlesTable.getSelectionModel().setCellSelectionEnabled(false);
         articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn numberCol = new TableColumn("Quantity");
+        TableColumn<Map,String> numberCol = new TableColumn("Quantity");
         numberCol.setMinWidth(100);
+        numberCol.setCellValueFactory(new MapValueFactory<>("quantity"));
 
-        TableColumn brandCol = new TableColumn("Brand");
+        TableColumn<Map,String> brandCol = new TableColumn("Brand");
         brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(new PropertyValueFactory<Article, String>("brand"));
+        brandCol.setCellValueFactory(new MapValueFactory<>("brand"));
 
-        TableColumn modelCol = new TableColumn("Model");
+        TableColumn<Map,String> modelCol = new TableColumn("Model");
         modelCol.setMinWidth(100);
-        modelCol.setCellValueFactory(new PropertyValueFactory<Article, String>("Model"));
+        modelCol.setCellValueFactory(new MapValueFactory<>("model"));
 
-        TableColumn acousticCol = new TableColumn("Acoustic");
+        TableColumn<Map,String> acousticCol = new TableColumn("Acoustic");
         acousticCol.setMinWidth(100);
-        acousticCol.setCellValueFactory(new PropertyValueFactory<Article, String>("acoustic"));
+        acousticCol.setCellValueFactory(new MapValueFactory<>("acoustic"));
 
-        TableColumn typeCol = new TableColumn("Type");
+        TableColumn<Map,String> typeCol = new TableColumn("Type");
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new PropertyValueFactory<Article, String>("type"));
+        typeCol.setCellValueFactory(new MapValueFactory<>("type"));
 
-        TableColumn priceCol = new TableColumn("Price");
+        TableColumn<Map,String> priceCol = new TableColumn("Price");
         priceCol.setMinWidth(100);
-        priceCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("price"));
+        priceCol.setCellValueFactory(new MapValueFactory<>("price"));
 
         articlesTable.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
 
@@ -199,21 +208,23 @@ public class CreateOrderScene {
 
                 if(aad.getArticle() != null && aad.getAmount() <= aad.getArticle().getQuantity()){
 
-                    amount = aad.getAmount();
 
-                    for (int i = 0; i < amount; i++) {
+                    Article article = aad.getArticle();
+                    if(articles.containsKey(article)){
+                        articles.remove(article);
+                        articles.put(article,aad.getAmount());
 
-                        articles.add(aad.getArticle());
-                        aad.getArticle().setQuantity(aad.getArticle().getQuantity() -1);
                     }
-
-                    olArticles = FXCollections.observableArrayList(articles);
-                    articlesTable.setItems(olArticles);
+                    else {
+                        articles.put(article, aad.getAmount());
+                    }
+                    fillTableArticles(articlesTable);
                 }
             }
         });
 
-        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+        /*deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Article article = articlesTable.getSelectionModel().getSelectedItem();
@@ -227,9 +238,9 @@ public class CreateOrderScene {
                     lblWarning.setText("you did not choose any item! choose item and then press delete");
                 }
             }
-        });
+        });*/
 
-        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+        /*resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
 
@@ -249,8 +260,8 @@ public class CreateOrderScene {
                 articlesTable.setItems(olArticles);
             }
         });
-
-        confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
+*/
+       /* confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 lblWarning.setText("");
@@ -272,10 +283,30 @@ public class CreateOrderScene {
                 olArticles = FXCollections.observableArrayList(articles);
                 articlesTable.setItems(olArticles);
             }
-        });
+        });*/
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
         layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout,lblWarning);
         scene = new Scene(layout);
+    }
+
+    public void fillTableArticles(TableView tableView){
+
+
+        tableView.getItems().clear();
+        olArticles.clear();
+        for(Map.Entry<Article,Integer> entry : articles.entrySet()) {
+            HashMap<String,Object> mapArticles = new HashMap<>();
+            mapArticles.put("quantity",entry.getValue());
+            mapArticles.put("brand",entry.getKey().getBrand());
+            mapArticles.put("model",entry.getKey().getModel());
+            mapArticles.put("acoustic",entry.getKey().isAcoustic());
+            mapArticles.put("type",entry.getKey().getType());
+            mapArticles.put("price",entry.getKey().getPrice());
+            olArticles.add(mapArticles);
+        }
+
+
+        tableView.getItems().addAll(olArticles);
     }
 }
