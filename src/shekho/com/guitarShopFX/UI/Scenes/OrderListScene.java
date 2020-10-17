@@ -89,6 +89,7 @@ public class OrderListScene {
         idCol.setMinWidth(100);
         idCol.setCellValueFactory(new PropertyValueFactory<Article, String>("id"));
 
+
         TableColumn brandCol = new TableColumn("Brand");
         brandCol.setMinWidth(100);
         brandCol.setCellValueFactory(new PropertyValueFactory<Article, String>("brand"));
@@ -111,23 +112,22 @@ public class OrderListScene {
 
         TableColumn quantityCol = new TableColumn("Quantity");
         quantityCol.setMinWidth(100);
-        quantityCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("number"));
 
         tbArticles.getColumns().addAll(idCol,brandCol,modelCol,acousticCol,typeCol,priceCol,quantityCol);
 
-       /* tbOrder.setRowFactory(stv ->{
+
+        tbOrder.setRowFactory(stv ->{
             TableRow<Order> row = new TableRow<>();
             row.setOnMouseClicked(event ->{
                 if(event.getClickCount() == 2 && !row.isEmpty()){
                     Order order = row.getItem();
-                    List<Article> lArticle= order.getArticles();
-                    olArticles = FXCollections.observableArrayList(lArticle);
+                    olArticles = FXCollections.observableArrayList(order.getArticles());
                     tbArticles.setItems(olArticles);
                 }
             });
 
             return row;
-        });*/
+        });
 
         layout.getChildren().addAll(lblOrderList,tbOrder,lblDetails,tbArticles);
         scene = new Scene(layout);

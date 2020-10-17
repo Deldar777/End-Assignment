@@ -29,8 +29,9 @@ import java.util.Map;
 public class CreateOrderScene {
 
     private ObservableList<Article> olArticles;
-    private Map<Article,Integer> articles_amount;
     private List<Article> articles = new ArrayList<>();
+    private List<Integer> articlesAmount;
+    private int amount;
 
 
     private Scene scene;
@@ -151,9 +152,8 @@ public class CreateOrderScene {
         articlesTable.getSelectionModel().setCellSelectionEnabled(false);
         articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-       /* TableColumn numberCol = new TableColumn("Quantity");
+        TableColumn numberCol = new TableColumn("Quantity");
         numberCol.setMinWidth(100);
-        numberCol.setCellValueFactory(new PropertyValueFactory<Article, Integer>("number"));*/
 
         TableColumn brandCol = new TableColumn("Brand");
         brandCol.setMinWidth(100);
@@ -175,9 +175,7 @@ public class CreateOrderScene {
         priceCol.setMinWidth(100);
         priceCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("price"));
 
-        articlesTable.getColumns().addAll(brandCol,modelCol,acousticCol,typeCol,priceCol);
-
-
+        articlesTable.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
 
 
         HBox buttonsLayout = new HBox();
@@ -199,22 +197,29 @@ public class CreateOrderScene {
                 aad.getWindow().initModality(Modality.APPLICATION_MODAL);
                 aad.getWindow().showAndWait();
 
-                if(aad.getArticle() != null && aad.getAmount() != 0){
+                if(aad.getArticle() != null && aad.getAmount() <= aad.getArticle().getQuantity()){
 
-                    articles.add(aad.getArticle());
+                    amount = aad.getAmount();
+
+                    for (int i = 0; i < amount; i++) {
+
+                        articles.add(aad.getArticle());
+                        aad.getArticle().setQuantity(aad.getArticle().getQuantity() -1);
+                    }
+
                     olArticles = FXCollections.observableArrayList(articles);
                     articlesTable.setItems(olArticles);
                 }
             }
         });
 
-        /*deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Article article = articlesTable.getSelectionModel().getSelectedItem();
 
                 if(article != null){
-                    article.setQuantity(article.getQuantity() + article.getNumber());
+                    article.setQuantity(article.getQuantity() + 1);
                     articles.remove(article);
                     olArticles = FXCollections.observableArrayList(articles);
                     articlesTable.setItems(olArticles);
@@ -222,11 +227,17 @@ public class CreateOrderScene {
                     lblWarning.setText("you did not choose any item! choose item and then press delete");
                 }
             }
-        });*/
+        });
 
-        /*resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+
+
+                for (Article a:articles
+                     ) {
+                    a.setQuantity(a.getQuantity() +1);
+                }
                 customer = null;
                 for (Label l:customersLbl
                 ) {
@@ -237,20 +248,19 @@ public class CreateOrderScene {
                 olArticles = FXCollections.observableArrayList(articles);
                 articlesTable.setItems(olArticles);
             }
-        });*/
+        });
 
-        /*confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
+        confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 lblWarning.setText("");
 
                 if(customer != null && !articles.isEmpty()){
-                    ConfirmOrderDialog cod = new ConfirmOrderDialog(db,getOrderNumber(),customer,articles);
+                    ConfirmOrderDialog cod = new ConfirmOrderDialog(db,customer,articles);
                     cod.getWindow().showAndWait();
                 }else{
                     lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
                 }
-
 
                 customer = null;
                 for (Label l:customersLbl
@@ -262,7 +272,7 @@ public class CreateOrderScene {
                 olArticles = FXCollections.observableArrayList(articles);
                 articlesTable.setItems(olArticles);
             }
-        });*/
+        });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
         layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout,lblWarning);

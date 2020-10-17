@@ -104,8 +104,6 @@ public class AddArticlesDialog {
                     if(article != null){
 
                         if(amount <= article.getQuantity()){
-
-                            article.setQuantity(article.getQuantity() - Integer.parseInt(txtNumbers.getText()));
                             window.close();
 
                         }else{
@@ -118,6 +116,13 @@ public class AddArticlesDialog {
                 }catch (Exception e){
                     lblWarning.setText(e.getMessage());
                 }
+            }
+        });
+
+        btnCancel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                window.close();
             }
         });
 

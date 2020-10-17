@@ -10,8 +10,8 @@ public class Order {
     private String date;
     private Customer customer;
     private int quantity;
-    private Map<Article,Integer> articles;
-    private int count;
+    private List<Article> articles;
+    private List<Integer> articlesNumber;
     private double totalPrice;
 
 
@@ -25,42 +25,71 @@ public class Order {
         return customer;
     }
 
-    public Order() {
+    /*public int setQuantity() {
+       return quantity = articlesNumber.size();
+    }*/
 
+    public Order(Customer customer,List<Article> articles) {
+
+        this.articles = articles;
+        this.customer = customer;
+
+        orderNumber = createOrderNumber();
         date = LocalDate.now().toString();
-        quantity = getQuantity();
-        count = getCount();
-        //totalPrice = getTotalPrice();
+        //quantity = setQuantity();
+        totalPrice = getTotalPrice();
     }
 
-    /*public double getTotalPrice(){
+    public double getTotalPrice(){
 
         double total = 0;
         for (Article a:articles
         ) {
-            total += a.getPrice() * a.getNumber();
+            total += a.getPrice();
         }
 
         return total;
-    }*/
+    }
 
     public int getOrderNumber() {
+        return orderNumber;
+    }
+    public int createOrderNumber(){
         orderCounter++;
         return orderCounter;
     }
 
     public int getQuantity() {
+        int quantity = 0;
+        for (Article a: articles
+             ) {
+            if(!articles.contains(a)){
+                quantity++;
+            }
+        }
         return quantity;
     }
 
-    public void setQuantity() {
-        quantity = articles.size();
-    }
 
     public int getCount(){
        return articles.size();
     }
-    public Map<Article,Integer> getArticles() {
+
+    public List<Integer> getArticlesNumber() {
+        return articlesNumber;
+    }
+
+    public List<Article> getArticles() {
         return articles;
+    }
+
+    public Article getArticle(){
+        Article article = null;
+
+        for (Article a:articles
+             ) {
+            article = a;
+        }
+        return article;
     }
 }

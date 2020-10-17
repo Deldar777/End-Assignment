@@ -1,12 +1,6 @@
 package shekho.com.guitarShopFX.Models;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class Article {
-
-
 
     private String brand;
     private String model;
@@ -46,7 +40,9 @@ public class Article {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    public String getId() {return id; }
     public boolean isAcoustic() {
         return acoustic;
     }
+
 }

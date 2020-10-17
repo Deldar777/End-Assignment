@@ -26,7 +26,7 @@ public class ConfirmOrderDialog {
         return window;
     }
 
-    public ConfirmOrderDialog(Database db, Customer customer, List<Article> articleList){
+    public ConfirmOrderDialog(Database db, Customer customer, List<Article> articles){
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Confirm Order");
@@ -70,13 +70,13 @@ public class ConfirmOrderDialog {
 
         double totalPrice = 0;
 
-       /* for (Article a:articleList
+        for (Article a:articles
              ) {
-            totalPrice += a.getPrice() * a.getNumber();
+            totalPrice += a.getPrice();
             HBox articlesInformationLayout = new HBox();
             articlesInformationLayout.setSpacing(60);
 
-            Label lblQ = new Label(String.valueOf(a.getNumber()));
+            Label lblQ = new Label("Quantity");
             Label lblB = new Label(a.getBrand());
             Label lblM = new Label(a.getModel());
             Label lblT = new Label(String.valueOf(a.getType()));
@@ -84,7 +84,7 @@ public class ConfirmOrderDialog {
 
             articlesInformationLayout.getChildren().addAll(lblQ,lblB,lblM,lblT,lblP);
             layout.getChildren().add(articlesInformationLayout);
-        }*/
+        }
 
 
         HBox totalPriceLayout = new HBox();
@@ -100,9 +100,12 @@ public class ConfirmOrderDialog {
         btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Order order = new Order();
-                db.setOrders(order);
 
+                if(customer != null && !articles.isEmpty()){
+                    Order order = new Order(customer,articles);
+                    db.setOrders(order);
+
+                }
                 window.close();
             }
         });
