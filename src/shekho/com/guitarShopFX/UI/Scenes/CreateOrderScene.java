@@ -227,7 +227,6 @@ public class CreateOrderScene {
 
                 if(object != null){
                     tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
-                    articles.remove(object);
                 }else{
                     lblWarning.setText("You did not choose any item! choose item and then press delete");
                 }

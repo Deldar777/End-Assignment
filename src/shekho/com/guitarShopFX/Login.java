@@ -109,15 +109,15 @@ public class Login extends Application {
             home.getWindow().show();
             window.close();
 
-            /*layout.setTop(top);
+           /* layout.setTop(top);
             layout.setCenter(center);
 
             Scene scene = new Scene(layout);
             scene.getStylesheets().add("resources/css/style.css");
 
             window.setScene(scene);
-            window.show();*/
-
+            window.show();
+*/
         }catch (Exception e){
             System.out.println(e.getMessage());
         }

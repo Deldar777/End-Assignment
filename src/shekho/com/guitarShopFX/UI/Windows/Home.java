@@ -52,9 +52,12 @@ public class Home {
         MenuItem listOrdersItem = new MenuItem("Orders");
         MenuItem createOrderItem = new MenuItem("Create Order");
         MenuItem manageStockItem = new MenuItem("Manage Stock");
+        MenuItem dashBoardItem = new MenuItem("Dashboard");
 
         menuSales.getItems().add(listOrdersItem);
+        menuHome.getItems().add(dashBoardItem);
         menuBar.getMenus().addAll(menuHome,menuSales);
+
 
         //determine which menu and menuitem add to menubar depends on the user role
         if(user.getRole() == Role.MANAGER){
@@ -85,6 +88,8 @@ public class Home {
             }
         });
 
+
+
         manageStockItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -109,9 +114,18 @@ public class Home {
         lblWelcome.setId("headerLbl");
 
         layout.getChildren().addAll(menuBar,labelsLayout);
+        
 
         scene = new Scene(layout);
         scene.getStylesheets().add("resources/css/style.css");
         window.setScene(scene);
+
+        dashBoardItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                layout.getChildren().remove(1);
+                layout.getChildren().add(labelsLayout);
+            }
+        });
     }
 }
