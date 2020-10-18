@@ -16,7 +16,9 @@ import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
 import shekho.com.guitarShopFX.Models.Order;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConfirmOrderDialog {
 
@@ -26,7 +28,7 @@ public class ConfirmOrderDialog {
         return window;
     }
 
-    public ConfirmOrderDialog(Database db, Customer customer, List<Article> articles){
+    public ConfirmOrderDialog(Database db, Customer customer, HashMap<Article,Integer> articles){
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Confirm Order");
@@ -70,22 +72,23 @@ public class ConfirmOrderDialog {
 
         double totalPrice = 0;
 
-        for (Article a:articles
+
+        for (Map.Entry<Article,Integer> entry:articles.entrySet()
              ) {
-            totalPrice += a.getPrice();
+
+            totalPrice += entry.getKey().getPrice() * entry.getValue();
             HBox articlesInformationLayout = new HBox();
             articlesInformationLayout.setSpacing(60);
 
-            Label lblQ = new Label("Quantity");
-            Label lblB = new Label(a.getBrand());
-            Label lblM = new Label(a.getModel());
-            Label lblT = new Label(String.valueOf(a.getType()));
-            Label lblP = new Label(String.valueOf(a.getPrice()));
+            Label lblQ = new Label(String.valueOf(entry.getValue()));
+            Label lblB = new Label(entry.getKey().getBrand());
+            Label lblM = new Label(entry.getKey().getModel());
+            Label lblT = new Label(String.valueOf(entry.getKey().getType()));
+            Label lblP = new Label(String.valueOf(entry.getKey().getPrice()));
 
             articlesInformationLayout.getChildren().addAll(lblQ,lblB,lblM,lblT,lblP);
             layout.getChildren().add(articlesInformationLayout);
         }
-
 
         HBox totalPriceLayout = new HBox();
         totalPriceLayout.setSpacing(10);
@@ -97,18 +100,23 @@ public class ConfirmOrderDialog {
 
         Button btnConfirm = new Button("Confirm");
 
-        /*btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
+        btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
 
                 if(customer != null && !articles.isEmpty()){
+
+                    //to adjust the stock
+                    for (Map.Entry<Article,Integer> entry:articles.entrySet()
+                    ) {
+                        entry.getKey().setQuantity(entry.getKey().getQuantity() - entry.getValue());
+                    }
                     Order order = new Order(customer,articles);
                     db.setOrders(order);
-
                 }
                 window.close();
             }
-        });*/
+        });
 
         layout.getChildren().addAll(totalPriceLayout,btnConfirm);
         Scene scene = new Scene(layout);

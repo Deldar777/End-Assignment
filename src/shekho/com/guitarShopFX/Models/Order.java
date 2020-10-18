@@ -10,14 +10,26 @@ public class Order {
     private int orderNumber;
     private String date;
     private Customer customer;
-    private int quantity;
     private HashMap<Article,Integer> articles;
-    private List<Integer> articlesNumber;
+    private int count;
     private double totalPrice;
 
 
+    public double getTotalPrice() {
+        double total = 0;
+
+        for (Map.Entry<Article,Integer> entry:articles.entrySet()
+             ) {
+            total += entry.getKey().getPrice() * entry.getValue();
+        }
+        return total;
+    }
+
     private int orderCounter = 100;
 
+    public int getCount() {
+        return count;
+    }
 
     public String getDate() {
         return date;
@@ -26,9 +38,6 @@ public class Order {
         return customer;
     }
 
-    /*public int setQuantity() {
-       return quantity = articlesNumber.size();
-    }*/
 
     public Order(Customer customer,HashMap<Article,Integer> articles) {
 
@@ -37,20 +46,9 @@ public class Order {
 
         orderNumber = createOrderNumber();
         date = LocalDate.now().toString();
-        //quantity = setQuantity();
-        //totalPrice = getTotalPrice();
+        count = articles.size();
+        totalPrice = getTotalPrice();
     }
-
-   /* public double getTotalPrice(){
-
-        double total = 0;
-        for (Article a:articles
-        ) {
-            total += a.getPrice();
-        }
-
-        return total;
-    }*/
 
     public int getOrderNumber() {
         return orderNumber;
@@ -58,26 +56,6 @@ public class Order {
     public int createOrderNumber(){
         orderCounter++;
         return orderCounter;
-    }
-
-   /* public int getQuantity() {
-        int quantity = 0;
-        for (Article a: articles
-             ) {
-            if(!articles.contains(a)){
-                quantity++;
-            }
-        }
-        return quantity;
-    }*/
-
-
-    public int getCount(){
-       return articles.size();
-    }
-
-    public List<Integer> getArticlesNumber() {
-        return articlesNumber;
     }
 
     public HashMap<Article,Integer> getArticles() {

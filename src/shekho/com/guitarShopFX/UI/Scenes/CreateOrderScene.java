@@ -1,5 +1,6 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,13 +32,12 @@ import java.util.Map;
 public class CreateOrderScene {
 
 
+    private TableView tvArticles = new TableView();
     private HashMap<Article,Integer> articles = new HashMap<>();
     private ObservableList<Map<String, Object>> olArticles =
     FXCollections.<Map<String, Object>>observableArrayList();
 
-
     private int amount;
-
 
     private Scene scene;
     private Customer customer;
@@ -152,13 +152,9 @@ public class CreateOrderScene {
         });
 
 
-
-
-
-        TableView articlesTable = new TableView<>();
-        articlesTable.setEditable(true);
-        articlesTable.getSelectionModel().setCellSelectionEnabled(false);
-        articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tvArticles.setEditable(true);
+        tvArticles.getSelectionModel().setCellSelectionEnabled(false);
+        tvArticles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         TableColumn<Map,String> numberCol = new TableColumn("Quantity");
         numberCol.setMinWidth(100);
@@ -184,7 +180,7 @@ public class CreateOrderScene {
         priceCol.setMinWidth(100);
         priceCol.setCellValueFactory(new MapValueFactory<>("price"));
 
-        articlesTable.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
+        tvArticles.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
 
 
         HBox buttonsLayout = new HBox();
@@ -208,60 +204,52 @@ public class CreateOrderScene {
 
                 if(aad.getArticle() != null && aad.getAmount() <= aad.getArticle().getQuantity()){
 
-
                     Article article = aad.getArticle();
                     if(articles.containsKey(article)){
                         articles.remove(article);
                         articles.put(article,aad.getAmount());
-
                     }
                     else {
                         articles.put(article, aad.getAmount());
                     }
-                    fillTableArticles(articlesTable);
+                    fillTableArticles();
                 }
             }
         });
 
 
-        /*deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
+        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                Article article = articlesTable.getSelectionModel().getSelectedItem();
+                lblWarning.setText("");
 
-                if(article != null){
-                    article.setQuantity(article.getQuantity() + 1);
-                    articles.remove(article);
-                    olArticles = FXCollections.observableArrayList(articles);
-                    articlesTable.setItems(olArticles);
+                Object object = tvArticles.getSelectionModel().getSelectedItem();
+
+                if(object != null){
+                    tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
+                    articles.remove(object);
                 }else{
-                    lblWarning.setText("you did not choose any item! choose item and then press delete");
+                    lblWarning.setText("You did not choose any item! choose item and then press delete");
                 }
-            }
-        });*/
 
-        /*resetBtn.setOnAction(new EventHandler<ActionEvent>() {
+            }
+        });
+
+        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
 
-
-                for (Article a:articles
-                     ) {
-                    a.setQuantity(a.getQuantity() +1);
-                }
                 customer = null;
                 for (Label l:customersLbl
                 ) {
                     l.setText("");
                 }
-
-                articles = new ArrayList<>();
-                olArticles = FXCollections.observableArrayList(articles);
-                articlesTable.setItems(olArticles);
+                articles  = new HashMap<>();
+                fillTableArticles();
             }
         });
-*/
-       /* confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+        confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 lblWarning.setText("");
@@ -269,6 +257,7 @@ public class CreateOrderScene {
                 if(customer != null && !articles.isEmpty()){
                     ConfirmOrderDialog cod = new ConfirmOrderDialog(db,customer,articles);
                     cod.getWindow().showAndWait();
+
                 }else{
                     lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
                 }
@@ -278,22 +267,19 @@ public class CreateOrderScene {
                      ) {
                     l.setText("");
                 }
-
-                articles = new ArrayList<>();
-                olArticles = FXCollections.observableArrayList(articles);
-                articlesTable.setItems(olArticles);
+                articles  = new HashMap<>();
+                fillTableArticles();
             }
-        });*/
+        });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
-        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,articlesTable,buttonsLayout,lblWarning);
+        layout.getChildren().addAll(lblCreateOrder,lblCustomer,search_customerFields,lblArticles,tvArticles,buttonsLayout,lblWarning);
         scene = new Scene(layout);
     }
 
-    public void fillTableArticles(TableView tableView){
+    public void fillTableArticles(){
 
-
-        tableView.getItems().clear();
+        tvArticles.getItems().clear();
         olArticles.clear();
         for(Map.Entry<Article,Integer> entry : articles.entrySet()) {
             HashMap<String,Object> mapArticles = new HashMap<>();
@@ -305,8 +291,6 @@ public class CreateOrderScene {
             mapArticles.put("price",entry.getKey().getPrice());
             olArticles.add(mapArticles);
         }
-
-
-        tableView.getItems().addAll(olArticles);
+        tvArticles.getItems().addAll(olArticles);
     }
 }
