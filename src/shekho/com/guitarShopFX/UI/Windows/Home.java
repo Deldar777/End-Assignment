@@ -15,6 +15,7 @@ import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Role;
 import shekho.com.guitarShopFX.Models.User;
 import shekho.com.guitarShopFX.UI.Scenes.CreateOrderScene;
+import shekho.com.guitarShopFX.UI.Scenes.EditCustomerScene;
 import shekho.com.guitarShopFX.UI.Scenes.ManageStockScene;
 import shekho.com.guitarShopFX.UI.Scenes.OrderListScene;
 
@@ -49,21 +50,28 @@ public class Home {
         Menu menuHome = new Menu("Home");
         Menu menuSales = new Menu("Sales");
         Menu menuStock = new Menu("Stock");
+        Menu menuCustomers = new Menu("Customers");
+        Menu menuArticles = new Menu("Articles");
+
         MenuItem listOrdersItem = new MenuItem("Orders");
         MenuItem createOrderItem = new MenuItem("Create Order");
         MenuItem manageStockItem = new MenuItem("Manage Stock");
         MenuItem dashBoardItem = new MenuItem("Dashboard");
+        MenuItem editCustomer = new MenuItem("Edit customer");
+        MenuItem editArticle = new MenuItem("Edit Article");
 
+        menuStock.getItems().add(manageStockItem);
         menuSales.getItems().add(listOrdersItem);
         menuHome.getItems().add(dashBoardItem);
+        menuCustomers.getItems().add(editCustomer);
+        menuArticles.getItems().add(editArticle);
         menuBar.getMenus().addAll(menuHome,menuSales);
-
 
         //determine which menu and menuitem add to menubar depends on the user role
         if(user.getRole() == Role.MANAGER){
-            menuBar.getMenus().add(menuStock);
-            menuStock.getItems().add(manageStockItem);
+            menuBar.getMenus().addAll(menuStock,menuArticles);
         }else {
+            menuBar.getMenus().add(menuCustomers);
             menuSales.getItems().add(createOrderItem);
         }
 
@@ -85,6 +93,16 @@ public class Home {
                 layout.getChildren().remove(1);
                 layout.getChildren().add(ols.getScene().getRoot());
                 window.setTitle("GuitarShop FX - View Order List");
+            }
+        });
+
+        editCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                EditCustomerScene ecs = new EditCustomerScene(db);
+                layout.getChildren().remove(1);
+                layout.getChildren().add(ecs.getScene().getRoot());
+                window.setTitle("GuitarShop FX - Edit Customer");
             }
         });
 
