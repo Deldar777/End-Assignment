@@ -19,7 +19,6 @@ import shekho.com.guitarShopFX.Models.Customer;
 
 public class AddCustomer {
 
-    private Scene scene;
     private Stage window;
     public Stage getWindow() {
         return window;

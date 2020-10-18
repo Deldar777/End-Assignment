@@ -14,10 +14,7 @@ import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Role;
 import shekho.com.guitarShopFX.Models.User;
-import shekho.com.guitarShopFX.UI.Scenes.CreateOrderScene;
-import shekho.com.guitarShopFX.UI.Scenes.EditCustomerScene;
-import shekho.com.guitarShopFX.UI.Scenes.ManageStockScene;
-import shekho.com.guitarShopFX.UI.Scenes.OrderListScene;
+import shekho.com.guitarShopFX.UI.Scenes.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -105,8 +102,15 @@ public class Home {
                 window.setTitle("GuitarShop FX - Edit Customer");
             }
         });
-
-
+        editArticle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                EditArticleScene ecs = new EditArticleScene(db);
+                layout.getChildren().remove(1);
+                layout.getChildren().add(ecs.getScene().getRoot());
+                window.setTitle("GuitarShop FX - Edit Article");
+            }
+        });
 
         manageStockItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override

@@ -13,11 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Article;
 import shekho.com.guitarShopFX.Models.Customer;
-import shekho.com.guitarShopFX.Models.Order;
 import shekho.com.guitarShopFX.UI.Dialogs.AddCustomer;
-import shekho.com.guitarShopFX.UI.Dialogs.ConfirmOrderDialog;
+
 
 import java.util.List;
 
@@ -29,10 +27,6 @@ public class EditCustomerScene {
 
     public Scene getScene() {
         return scene;
-    }
-
-    public List<Customer> getCustomers() {
-        return customers;
     }
 
     public EditCustomerScene(Database db){
@@ -94,20 +88,18 @@ public class EditCustomerScene {
         lblWarning.setId("lblWarning");
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn);
 
-        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Customer customer = tvCustomers.getSelectionModel().getSelectedItem();
-                if(customer != null){
-                    db.getCustomers().remove(customer);
-                    customers = db.getCustomers();
-                    olCustomers = FXCollections.observableArrayList(customers);
-                    tvCustomers.setItems(olCustomers);
-                }else{
-                    lblWarning.setText("You did not choose any customer! Choose a customer and then press delete");
-                }
+        deleteBtn.setOnAction(actionEvent -> {
+            Customer customer = tvCustomers.getSelectionModel().getSelectedItem();
+            if(customer != null){
 
+                db.getCustomers().remove(customer);
+                customers = db.getCustomers();
+                olCustomers = FXCollections.observableArrayList(customers);
+                tvCustomers.setItems(olCustomers);
+            }else{
+                lblWarning.setText("You did not choose any customer! Choose a customer and then press delete");
             }
+
         });
 
         addBtn.setOnAction(new EventHandler<ActionEvent>() {
