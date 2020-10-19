@@ -77,4 +77,17 @@ public class Database {
         }
         return null;
     }
+
+    public Article getArticleByModel(String model){
+        Article article;
+
+        for (Article a:articles
+             ) {
+            if (a.getModel().equals(model)){
+                article = a;
+                return  article;
+            }
+        }
+        return null;
+    }
 }

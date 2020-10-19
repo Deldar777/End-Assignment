@@ -104,7 +104,7 @@ public class Login extends Application {
             });*/
 
             User user = new User("ryan","ryan777","Ryan",
-                    "Erfmann","06-12345678","ryan.erfmann@hotmail.com", Role.MANAGER);
+                    "Erfmann","06-12345678","ryan.erfmann@hotmail.com", Role.SALES);
             Home home = new Home(db,user);
             home.getWindow().show();
             window.close();

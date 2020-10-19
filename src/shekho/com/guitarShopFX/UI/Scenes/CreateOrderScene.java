@@ -1,5 +1,6 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
+import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -221,16 +222,32 @@ public class CreateOrderScene {
         deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                lblWarning.setText("");
 
-                Object object = tvArticles.getSelectionModel().getSelectedItem();
+                try{
+                    lblWarning.setText("");
 
-                if(object != null){
-                    tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
-                }else{
-                    lblWarning.setText("You did not choose any item! choose item and then press delete");
+                    Object object = tvArticles.getSelectionModel().getSelectedItems();
+                    String string = object.toString();
+                    String regex = ",";
+                    String[] output = string.split(regex);
+                    String modelComplete = output[3];
+                    String regex1 = "=";
+                    String [] output2 = modelComplete.split(regex1);
+                    String model = output2[1];
+
+                    Article article = db.getArticleByModel(model);
+
+                    if(article != null){
+
+                        articles.remove(article);
+                        tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
+
+                    }else{
+                        lblWarning.setText("You did not choose any item! choose item and then press delete");
+                    }
+                }catch (Exception e){
+                    lblWarning.setText(e.getMessage());
                 }
-
             }
         });
 
