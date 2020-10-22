@@ -1,6 +1,8 @@
 package shekho.com.guitarShopFX.Models;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable {
 
     private String brand;
     private String model;

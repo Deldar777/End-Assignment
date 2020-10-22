@@ -12,10 +12,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
+import shekho.com.guitarShopFX.Models.*;
 import shekho.com.guitarShopFX.Models.Role;
 import shekho.com.guitarShopFX.Models.User;
 import shekho.com.guitarShopFX.UI.Scenes.*;
 
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -56,10 +58,12 @@ public class Home {
         MenuItem dashBoardItem = new MenuItem("Dashboard");
         MenuItem editCustomer = new MenuItem("Edit customer");
         MenuItem editArticle = new MenuItem("Edit Article");
+        MenuItem loadItem = new MenuItem("Load...");
+        MenuItem saveItem = new MenuItem("Save...");
 
         menuStock.getItems().add(manageStockItem);
         menuSales.getItems().add(listOrdersItem);
-        menuHome.getItems().add(dashBoardItem);
+        menuHome.getItems().addAll(dashBoardItem,loadItem,saveItem);
         menuCustomers.getItems().add(editCustomer);
         menuArticles.getItems().add(editArticle);
         menuBar.getMenus().addAll(menuHome,menuSales);
@@ -71,6 +75,45 @@ public class Home {
             menuBar.getMenus().add(menuCustomers);
             menuSales.getItems().add(createOrderItem);
         }
+
+        saveItem.setOnAction(ActionEvent ->{
+            try(FileOutputStream fos = new FileOutputStream(new File("articles.file"));
+                ObjectOutputStream oos = new ObjectOutputStream(fos)){
+
+                for (Article a:db.getArticles()
+                ) {
+                    oos.writeObject(a);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        loadItem.setOnAction(ActionEvent ->{
+            try(ObjectInputStream ois = new ObjectInputStream(
+                    new FileInputStream(new File("articles.file"))))
+            {
+                while (true){
+
+                    try{
+                        Article a = (Article) ois.readObject();
+                        db.getArticles().add(a);
+                    }catch (EOFException eofe){
+                        break;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
 
         createOrderItem.setOnAction(new EventHandler<ActionEvent>() {

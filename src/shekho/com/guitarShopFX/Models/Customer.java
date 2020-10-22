@@ -1,5 +1,6 @@
 package shekho.com.guitarShopFX.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,8 @@ public class Customer extends Person{
     private String city;
     private List<Order> orders = new ArrayList<>();
 
-    public Customer(String firstName, String lastName, String streetAddress, String city, String phoneNumber, String email) {
+    public Customer(String firstName, String lastName, String streetAddress,
+                    String city, String phoneNumber, String email) {
         super(firstName, lastName, phoneNumber, email);
         this.streetAddress = streetAddress;
         this.city = city;
@@ -32,5 +34,9 @@ public class Customer extends Person{
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
