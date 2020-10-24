@@ -70,9 +70,9 @@ public class Home {
 
         //determine which menu and menuitem add to menubar depends on the user role
         if(user.getRole() == Role.MANAGER){
-            menuBar.getMenus().addAll(menuStock,menuArticles);
+            menuBar.getMenus().addAll(menuStock,menuCustomers);
         }else {
-            menuBar.getMenus().add(menuCustomers);
+            menuBar.getMenus().addAll(menuArticles);
             menuSales.getItems().add(createOrderItem);
         }
 
