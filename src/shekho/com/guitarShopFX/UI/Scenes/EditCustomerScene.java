@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Customer;
-import shekho.com.guitarShopFX.UI.Dialogs.AddCustomer;
+import shekho.com.guitarShopFX.UI.Dialogs.AddCustomerDialog;
 
 
 import java.util.List;
@@ -47,29 +47,25 @@ public class EditCustomerScene {
         tvCustomers.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
-        TableColumn firstNameCol = new TableColumn("First Name");
+        TableColumn<Customer,String> firstNameCol = new TableColumn<>("First Name");
         firstNameCol.setMinWidth(100);
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
-
-        TableColumn lastNameCol = new TableColumn("Last Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        TableColumn<Customer,String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setMinWidth(100);
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
-
-        TableColumn streetAddressCol = new TableColumn("Street Address");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        TableColumn<Customer,String> streetAddressCol = new TableColumn<>("Street Address");
         streetAddressCol.setMinWidth(100);
-        streetAddressCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("streetAddress"));
-
-        TableColumn cityCol = new TableColumn("City");
+        streetAddressCol.setCellValueFactory(new PropertyValueFactory<>("streetAddress"));
+        TableColumn<Customer,String> cityCol = new TableColumn<>("City");
         cityCol.setMinWidth(100);
-        cityCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("city"));
-
-        TableColumn phoneNumberCol = new TableColumn("Phone #");
+        cityCol.setCellValueFactory(new PropertyValueFactory<>("city"));
+        TableColumn<Customer,String> phoneNumberCol = new TableColumn<>("Phone #");
         phoneNumberCol.setMinWidth(100);
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
+        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 
-        TableColumn emailCol = new TableColumn("Email");
+        TableColumn<Customer,String> emailCol = new TableColumn<>("Email");
         emailCol.setMinWidth(200);
-        emailCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 
         tvCustomers.getColumns().addAll(firstNameCol,lastNameCol,streetAddressCol,cityCol,phoneNumberCol,emailCol);
@@ -102,17 +98,14 @@ public class EditCustomerScene {
 
         });
 
-        addBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                AddCustomer ac = new AddCustomer(db);
-                ac.getWindow().initModality(Modality.APPLICATION_MODAL);
-                ac.getWindow().showAndWait();
+        addBtn.setOnAction(actionEvent -> {
+            AddCustomerDialog ac = new AddCustomerDialog(db);
+            ac.getWindow().initModality(Modality.APPLICATION_MODAL);
+            ac.getWindow().showAndWait();
 
-                customers = db.getCustomers();
-                olCustomers = FXCollections.observableArrayList(customers);
-                tvCustomers.setItems(olCustomers);
-            }
+            customers = db.getCustomers();
+            olCustomers = FXCollections.observableArrayList(customers);
+            tvCustomers.setItems(olCustomers);
         });
         layout.getChildren().addAll(lblCustomer,tvCustomers,buttonsLayout,lblWarning);
         scene = new Scene(layout);

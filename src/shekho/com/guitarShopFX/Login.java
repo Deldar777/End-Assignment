@@ -13,10 +13,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Role;
-import shekho.com.guitarShopFX.Models.User;
+import shekho.com.guitarShopFX.Models.*;
 import shekho.com.guitarShopFX.UI.Windows.Home;
 
 public class Login extends Application {
@@ -74,7 +74,7 @@ public class Login extends Application {
             center.add(btnLogin, 1, 3);
             center.add(lblMessage, 1, 4);
 
-            /*btnLogin.setOnAction(new EventHandler<ActionEvent>() {
+            btnLogin.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
 
@@ -88,8 +88,8 @@ public class Login extends Application {
                         if(user != null){
 
                             Home home = new Home(db,user);
-                            home.getWindow().show();
-                            window.close();
+                            home.getWindow().initModality(Modality.APPLICATION_MODAL);
+                            home.getWindow().showAndWait();
                         }else{
                             lblMessage.setText("The username of the password isn't correct");
                         }
@@ -101,15 +101,15 @@ public class Login extends Application {
                     pf.setText("");
 
                 }
-            });*/
+            });
 
-            User user = new User("ryan","ryan777","Ryan",
+           /* User user = new User("ryan","ryan777","Ryan",
                     "Erfmann","06-12345678","ryan.erfmann@hotmail.com", Role.MANAGER);
             Home home = new Home(db,user);
             home.getWindow().show();
-            window.close();
+            window.close();*/
 
-           /* layout.setTop(top);
+            layout.setTop(top);
             layout.setCenter(center);
 
             Scene scene = new Scene(layout);
@@ -117,10 +117,8 @@ public class Login extends Application {
 
             window.setScene(scene);
             window.show();
-*/
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 }

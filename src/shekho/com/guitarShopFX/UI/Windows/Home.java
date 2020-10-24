@@ -1,34 +1,26 @@
 package shekho.com.guitarShopFX.UI.Windows;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.*;
-import shekho.com.guitarShopFX.Models.Role;
-import shekho.com.guitarShopFX.Models.User;
 import shekho.com.guitarShopFX.UI.Scenes.*;
 
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 public class Home {
 
-    private Stage window;
+    private final Stage window;
     public Stage getWindow() {
         return window;
     }
-    private Scene scene;
 
     public Home(Database db, User user){
 
@@ -49,32 +41,36 @@ public class Home {
         Menu menuHome = new Menu("Home");
         Menu menuSales = new Menu("Sales");
         Menu menuStock = new Menu("Stock");
-        Menu menuCustomers = new Menu("Customers");
         Menu menuArticles = new Menu("Articles");
+        Menu menuUsers = new Menu("Users");
 
         MenuItem listOrdersItem = new MenuItem("Orders");
         MenuItem createOrderItem = new MenuItem("Create Order");
         MenuItem manageStockItem = new MenuItem("Manage Stock");
         MenuItem dashBoardItem = new MenuItem("Dashboard");
-        MenuItem editCustomer = new MenuItem("Edit customer");
         MenuItem editArticle = new MenuItem("Edit Article");
+        MenuItem logoutItem = new MenuItem("Logout");
         MenuItem loadItem = new MenuItem("Load...");
         MenuItem saveItem = new MenuItem("Save...");
+        MenuItem editCustomer = new MenuItem("Edit Customer");
+        MenuItem editUser = new MenuItem("Edit User");
 
         menuStock.getItems().add(manageStockItem);
         menuSales.getItems().add(listOrdersItem);
-        menuHome.getItems().addAll(dashBoardItem,loadItem,saveItem);
-        menuCustomers.getItems().add(editCustomer);
+        menuHome.getItems().addAll(dashBoardItem,loadItem,saveItem,logoutItem);
         menuArticles.getItems().add(editArticle);
         menuBar.getMenus().addAll(menuHome,menuSales);
+        menuUsers.getItems().addAll(editCustomer,editUser);
 
         //determine which menu and menuitem add to menubar depends on the user role
         if(user.getRole() == Role.MANAGER){
-            menuBar.getMenus().addAll(menuStock,menuCustomers);
+            menuBar.getMenus().addAll(menuStock,menuUsers);
         }else {
             menuBar.getMenus().addAll(menuArticles);
             menuSales.getItems().add(createOrderItem);
         }
+
+        logoutItem.setOnAction(ActionEvent -> window.close());
 
         saveItem.setOnAction(ActionEvent ->{
             try(FileOutputStream fos = new FileOutputStream(new File("articles.file"));
@@ -84,13 +80,10 @@ public class Home {
                 ) {
                     oos.writeObject(a);
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
-
 
         loadItem.setOnAction(ActionEvent ->{
             try(ObjectInputStream ois = new ObjectInputStream(
@@ -108,61 +101,50 @@ public class Home {
                     }
                 }
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
 
-        createOrderItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                CreateOrderScene createOrderScene = new CreateOrderScene(db);
-                layout.getChildren().remove(1);
-                layout.getChildren().add(createOrderScene.getScene().getRoot());
-                window.setTitle("GuitarShop FX - Create an Order");
-            }
+        createOrderItem.setOnAction(actionEvent -> {
+            CreateOrderScene createOrderScene = new CreateOrderScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(createOrderScene.getScene().getRoot());
+            window.setTitle("GuitarShop FX - Create an Order");
         });
 
-        listOrdersItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                OrderListScene ols = new OrderListScene(db);
-                layout.getChildren().remove(1);
-                layout.getChildren().add(ols.getScene().getRoot());
-                window.setTitle("GuitarShop FX - View Order List");
-            }
+        listOrdersItem.setOnAction(actionEvent -> {
+            OrderListScene ols = new OrderListScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(ols.getScene().getRoot());
+            window.setTitle("GuitarShop FX - View Order List");
         });
 
-        editCustomer.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                EditCustomerScene ecs = new EditCustomerScene(db);
-                layout.getChildren().remove(1);
-                layout.getChildren().add(ecs.getScene().getRoot());
-                window.setTitle("GuitarShop FX - Edit Customer");
-            }
+        editCustomer.setOnAction(actionEvent -> {
+            EditCustomerScene ecs = new EditCustomerScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(ecs.getScene().getRoot());
+            window.setTitle("GuitarShop FX - Edit Customer");
         });
-        editArticle.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                EditArticleScene ecs = new EditArticleScene(db);
-                layout.getChildren().remove(1);
-                layout.getChildren().add(ecs.getScene().getRoot());
-                window.setTitle("GuitarShop FX - Edit Article");
-            }
+        editUser.setOnAction(actionEvent -> {
+            EditUserScene eus = new EditUserScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(eus.getScene().getRoot());
+            window.setTitle("GuitarShop FX - Edit User");
+        });
+        editArticle.setOnAction(actionEvent -> {
+            EditArticleScene ecs = new EditArticleScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(ecs.getScene().getRoot());
+            window.setTitle("GuitarShop FX - Edit Article");
         });
 
-        manageStockItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ManageStockScene mss = new ManageStockScene(db);
-                layout.getChildren().remove(1);
-                layout.getChildren().add(mss.getScene().getRoot());
-                window.setTitle("GuitarShop FX - Stock Maintenance");
-            }
+        manageStockItem.setOnAction(actionEvent -> {
+            ManageStockScene mss = new ManageStockScene(db);
+            layout.getChildren().remove(1);
+            layout.getChildren().add(mss.getScene().getRoot());
+            window.setTitle("GuitarShop FX - Stock Maintenance");
         });
 
         VBox labelsLayout = new VBox();
@@ -181,16 +163,13 @@ public class Home {
         layout.getChildren().addAll(menuBar,labelsLayout);
         
 
-        scene = new Scene(layout);
+        Scene scene = new Scene(layout);
         scene.getStylesheets().add("resources/css/style.css");
         window.setScene(scene);
 
-        dashBoardItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                layout.getChildren().remove(1);
-                layout.getChildren().add(labelsLayout);
-            }
+        dashBoardItem.setOnAction(actionEvent -> {
+            layout.getChildren().remove(1);
+            layout.getChildren().add(labelsLayout);
         });
     }
 }

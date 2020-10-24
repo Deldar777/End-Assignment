@@ -17,14 +17,14 @@ import shekho.com.guitarShopFX.DAL.Database;
 import shekho.com.guitarShopFX.Models.Customer;
 
 
-public class AddCustomer {
+public class AddCustomerDialog {
 
     private Stage window;
     public Stage getWindow() {
         return window;
     }
 
-    public AddCustomer(Database db){
+    public AddCustomerDialog(Database db){
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Add Customer");
@@ -87,28 +87,25 @@ public class AddCustomer {
         customerLayout.add(txtEmail,1,5);
         customerLayout.add(btnAdd,1,6);
 
-        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                lblWaring.setText("");
+        btnAdd.setOnAction(actionEvent -> {
+            lblWaring.setText("");
 
-                String firstName = txtFirstName.getText();
-                String lastName = txtLastName.getText();
-                String address = txtAddress.getText();
-                String city = txtCity.getText();
-                String phoneNumber  = txtPhoneNumber.getText();
-                String email = txtEmail.getText();
+            String firstName = txtFirstName.getText();
+            String lastName = txtLastName.getText();
+            String address = txtAddress.getText();
+            String city = txtCity.getText();
+            String phoneNumber  = txtPhoneNumber.getText();
+            String email = txtEmail.getText();
 
-                if(!firstName.isEmpty() && !lastName.isEmpty() && !address.isEmpty()
-                && !city.isEmpty() && !phoneNumber.isEmpty() && !email.isEmpty()){
+            if(!firstName.isEmpty() && !lastName.isEmpty() && !address.isEmpty()
+            && !city.isEmpty() && !phoneNumber.isEmpty() && !email.isEmpty()){
 
-                    Customer customer = new Customer(firstName,lastName,address,city,phoneNumber,email);
-                    db.getCustomers().add(customer);
-                    window.close();
+                Customer customer = new Customer(firstName,lastName,address,city,phoneNumber,email);
+                db.getCustomers().add(customer);
+                window.close();
 
-                }else{
-                    lblWaring.setText("Not all fields are filled!");
-                }
+            }else{
+                lblWaring.setText("Not all fields are filled!");
             }
         });
 
