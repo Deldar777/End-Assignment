@@ -1,27 +1,24 @@
 package shekho.com.guitarShopFX.UI.Dialogs;
 
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.collections.transformation.FilteredList;
-import javafx.geometry.Insets;
+import javafx.geometry.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.*;
 
 public class ChooseCustomerDialog {
 
-    private ObservableList<Customer> customers;
     private Customer customer;
-    private Stage window;
-    private Scene scene;
+    private final Stage window;
+
 
     public Stage getWindow() {
         return window;
@@ -32,7 +29,7 @@ public class ChooseCustomerDialog {
 
     public ChooseCustomerDialog(Database db){
 
-        customers = FXCollections.observableArrayList(db.getCustomers());
+        ObservableList<Customer> customers = FXCollections.observableArrayList(db.getCustomers());
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Search Customer");
@@ -53,29 +50,24 @@ public class ChooseCustomerDialog {
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
-        TableColumn firstNameCol = new TableColumn("First Name");
+        TableColumn<Customer,String> firstNameCol = new TableColumn<>("First Name");
         firstNameCol.setMinWidth(100);
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("firstName"));
-
-        TableColumn lastNameCol = new TableColumn("Last Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        TableColumn<Customer,String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setMinWidth(100);
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("lastName"));
-
-        TableColumn streetAddressCol = new TableColumn("Street Address");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        TableColumn<Customer,String> streetAddressCol = new TableColumn<>("Street Address");
         streetAddressCol.setMinWidth(100);
-        streetAddressCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("streetAddress"));
-
-        TableColumn cityCol = new TableColumn("City");
+        streetAddressCol.setCellValueFactory(new PropertyValueFactory<>("streetAddress"));
+        TableColumn<Customer,String> cityCol = new TableColumn<>("City");
         cityCol.setMinWidth(100);
-        cityCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("city"));
-
-        TableColumn phoneNumberCol = new TableColumn("Phone #");
+        cityCol.setCellValueFactory(new PropertyValueFactory<>("city"));
+        TableColumn<Customer,String> phoneNumberCol = new TableColumn<>("Phone #");
         phoneNumberCol.setMinWidth(100);
-        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
-
-        TableColumn emailCol = new TableColumn("Email");
+        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        TableColumn<Customer,String> emailCol = new TableColumn<>("Email");
         emailCol.setMinWidth(200);
-        emailCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("email"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
 
 
         customerTable.setRowFactory(stv ->{
@@ -91,7 +83,7 @@ public class ChooseCustomerDialog {
         });
 
         //pass the data to a filtered list
-        FilteredList<Customer> flCustomer = new FilteredList(customers,C -> true);
+        FilteredList<Customer> flCustomer = new FilteredList<>(customers,C -> true);
         customerTable.getColumns().addAll(firstNameCol,lastNameCol,streetAddressCol,cityCol,phoneNumberCol,emailCol);
         customerTable.setItems(flCustomer);
 
@@ -132,7 +124,7 @@ public class ChooseCustomerDialog {
         searchBarHb.setPadding(new Insets(20));
 
         layout.getChildren().addAll(lblCustomerList,customerTable,searchBarHb);
-        scene = new Scene(layout);
+        Scene scene = new Scene(layout);
         scene.getStylesheets().add("resources/css/style.css");
         window.setScene(scene);
 

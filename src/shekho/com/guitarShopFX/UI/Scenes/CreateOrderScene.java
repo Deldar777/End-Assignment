@@ -1,55 +1,35 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
-import javafx.beans.Observable;
-import javafx.beans.property.ReadOnlyObjectProperty;
+
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Article;
-import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.*;
 import  javafx.scene.control.*;
 import shekho.com.guitarShopFX.UI.Dialogs.*;
+import java.util.*;
 
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public class CreateOrderScene {
 
 
-    private TableView tvArticles = new TableView();
+    private final TableView<Map.Entry<Article,Integer>> tvArticles = new TableView<>();
     private HashMap<Article,Integer> articles = new HashMap<>();
-    private ObservableList<Map<String, Object>> olArticles =
-    FXCollections.<Map<String, Object>>observableArrayList();
+    private final ObservableList<Map.Entry<Article,Integer>> olArticles =
+            FXCollections.observableArrayList();
 
-    private int amount;
 
-    private Scene scene;
+    private final Scene scene;
     private Customer customer;
-    private int counter = 100;
-    private List<Label> customersLbl;
-
-    
-    public int getOrderNumber(){
-        counter++;
-        return counter;
-    }
+    private final List<Label> customersLbl;
+    private final int orderNumber;
 
     public Scene getScene() {
         return scene;
@@ -62,7 +42,8 @@ public class CreateOrderScene {
         layout.setPadding(new Insets(20));
         layout.setSpacing(10);
 
-        Label lblCreateOrder = new Label("Create Order #" + getOrderNumber());
+        orderNumber = db.getOrderNumber();
+        Label lblCreateOrder = new Label("Create Order #" + orderNumber);
         lblCreateOrder.setId("headerLbl");
         Label lblCustomer = new Label("Customer");
         lblCustomer.setId("lbl");
@@ -89,21 +70,27 @@ public class CreateOrderScene {
         gpCustomerFields.setVgap(10);
 
         Label lblFirstName = new Label("First name");
+        lblFirstName.setId("lbl");
         Label lblFirstNameEmpty = new Label();
         lblFirstNameEmpty.setId("lbl");
         Label lblLastName = new Label("Last name");
+        lblLastName.setId("lbl");
         Label lblLastNameEmpty = new Label();
         lblLastNameEmpty.setId("lbl");
         Label lblStreetAddress = new Label("Street address");
+        lblStreetAddress.setId("lbl");
         Label lblStreetAddressEmpty = new Label();
         lblStreetAddressEmpty.setId("lbl");
         Label lblCity = new Label("City");
+        lblCity.setId("lbl");
         Label lblCityEmpty = new Label();
         lblCityEmpty.setId("lbl");
         Label lblPhoneNUmber = new Label("Phone number");
+        lblPhoneNUmber.setId("lbl");
         Label lblPhoneNumberEmpty = new Label();
         lblPhoneNumberEmpty.setId("lbl");
         Label lblEmailAddress = new Label("Email address");
+        lblEmailAddress.setId("lbl");
         Label lblEmailAddressEmpty = new Label();
         lblEmailAddressEmpty.setId("lbl");
 
@@ -125,30 +112,26 @@ public class CreateOrderScene {
 
         search_customerFields.getChildren().addAll(searchLayout,gpCustomerFields);
 
-        btnSearch.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                ChooseCustomerDialog ccd = new ChooseCustomerDialog(db);
-                ccd.getWindow().initModality(Modality.APPLICATION_MODAL);
-                ccd.getWindow().showAndWait();
+        btnSearch.setOnAction(actionEvent -> {
+            ChooseCustomerDialog ccd = new ChooseCustomerDialog(db);
+            ccd.getWindow().initModality(Modality.APPLICATION_MODAL);
+            ccd.getWindow().showAndWait();
 
-                customer = ccd.getCustomer();
-                if(customer != null){
+            customer = ccd.getCustomer();
+            if(customer != null){
 
-                    lblFirstNameEmpty.setText(ccd.getCustomer().getFirstName());
-                    lblLastNameEmpty.setText(ccd.getCustomer().getLastName());
-                    lblStreetAddressEmpty.setText(ccd.getCustomer().getStreetAddress());
-                    lblCityEmpty.setText(ccd.getCustomer().getCity());
-                    lblEmailAddressEmpty.setText(ccd.getCustomer().getEmail());
-                    lblPhoneNumberEmpty.setText(ccd.getCustomer().getPhoneNumber());
-
-                    customersLbl.add(lblFirstNameEmpty);
-                    customersLbl.add(lblLastNameEmpty);
-                    customersLbl.add(lblStreetAddressEmpty);
-                    customersLbl.add(lblCityEmpty);
-                    customersLbl.add(lblEmailAddressEmpty);
-                    customersLbl.add(lblPhoneNumberEmpty);
-                }
+                lblFirstNameEmpty.setText(ccd.getCustomer().getFirstName());
+                customersLbl.add(lblFirstNameEmpty);
+                lblLastNameEmpty.setText(ccd.getCustomer().getLastName());
+                customersLbl.add(lblLastNameEmpty);
+                lblStreetAddressEmpty.setText(ccd.getCustomer().getStreetAddress());
+                customersLbl.add(lblStreetAddressEmpty);
+                lblCityEmpty.setText(ccd.getCustomer().getCity());
+                customersLbl.add(lblCityEmpty);
+                lblEmailAddressEmpty.setText(ccd.getCustomer().getEmail());
+                customersLbl.add(lblEmailAddressEmpty);
+                lblPhoneNumberEmpty.setText(ccd.getCustomer().getPhoneNumber());
+                customersLbl.add(lblPhoneNumberEmpty);
             }
         });
 
@@ -157,31 +140,40 @@ public class CreateOrderScene {
         tvArticles.getSelectionModel().setCellSelectionEnabled(false);
         tvArticles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn<Map,String> numberCol = new TableColumn("Quantity");
+        TableColumn<Map.Entry<Article,Integer>,String> numberCol = new
+                TableColumn<>("Quantity");
         numberCol.setMinWidth(100);
-        numberCol.setCellValueFactory(new MapValueFactory<>("quantity"));
-
-        TableColumn<Map,String> brandCol = new TableColumn("Brand");
+        numberCol.setCellValueFactory(A -> new SimpleStringProperty
+                (String.valueOf(A.getValue().getValue())));
+        TableColumn<Map.Entry<Article,Integer>,String> brandCol = new
+                TableColumn<>("Brand");
         brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(new MapValueFactory<>("brand"));
-
-        TableColumn<Map,String> modelCol = new TableColumn("Model");
+        brandCol.setCellValueFactory(A -> new SimpleStringProperty
+                (A.getValue().getKey().getBrand()));
+        TableColumn<Map.Entry<Article,Integer>,String> modelCol = new
+                TableColumn<>("Model");
         modelCol.setMinWidth(100);
-        modelCol.setCellValueFactory(new MapValueFactory<>("model"));
-
-        TableColumn<Map,String> acousticCol = new TableColumn("Acoustic");
+        modelCol.setCellValueFactory(A -> new SimpleStringProperty
+                (A.getValue().getKey().getModel()));
+        TableColumn<Map.Entry<Article,Integer>,String> acousticCol = new
+                TableColumn<>("Acoustic");
         acousticCol.setMinWidth(100);
-        acousticCol.setCellValueFactory(new MapValueFactory<>("acoustic"));
-
-        TableColumn<Map,String> typeCol = new TableColumn("Type");
+        acousticCol.setCellValueFactory(A -> new SimpleStringProperty
+                (String.valueOf(A.getValue().getKey().isAcoustic())));
+        TableColumn<Map.Entry<Article,Integer>,String> typeCol = new
+                TableColumn<>("Type");
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new MapValueFactory<>("type"));
-
-        TableColumn<Map,String> priceCol = new TableColumn("Price");
+        typeCol.setCellValueFactory(A -> new SimpleStringProperty
+                (String.valueOf(A.getValue().getKey().getType())));
+        TableColumn<Map.Entry<Article,Integer>,String> priceCol = new
+                TableColumn<>("Price");
         priceCol.setMinWidth(100);
-        priceCol.setCellValueFactory(new MapValueFactory<>("price"));
+        priceCol.setCellValueFactory(A -> new SimpleStringProperty
+                (String.valueOf(A.getValue().getKey().getPrice())));
 
         tvArticles.getColumns().addAll(numberCol,brandCol,modelCol,acousticCol,typeCol,priceCol);
+        tvArticles.setItems(olArticles);
+
 
 
         HBox buttonsLayout = new HBox();
@@ -195,97 +187,85 @@ public class CreateOrderScene {
         Label lblWarning = new Label();
         lblWarning.setId("lblWarning");
 
-        addBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                lblWarning.setText("");
-                AddArticlesDialog aad = new AddArticlesDialog(db);
-                aad.getWindow().initModality(Modality.APPLICATION_MODAL);
-                aad.getWindow().showAndWait();
+        addBtn.setOnAction(actionEvent -> {
+            lblWarning.setText("");
+            AddArticlesDialog aad = new AddArticlesDialog(db);
+            aad.getWindow().initModality(Modality.APPLICATION_MODAL);
+            aad.getWindow().showAndWait();
 
-                if(aad.getArticle() != null && aad.getAmount() <= aad.getArticle().getQuantity()){
+            if(aad.getArticle() != null && aad.getAmount() <= aad.getArticle().getQuantity()){
 
-                    Article article = aad.getArticle();
-                    if(articles.containsKey(article)){
-                        articles.remove(article);
-                        articles.put(article,aad.getAmount());
-                    }
-                    else {
-                        articles.put(article, aad.getAmount());
-                    }
-                    fillTableArticles();
+                Article article = aad.getArticle();
+
+                if(articles.containsKey(article)){
+                    int oldValue = articles.get(article);
+                    article.setQuantity(article.getQuantity() + oldValue);
+
+                    articles.replace(article,oldValue,oldValue + aad.getAmount());
+
+                    int ordered = articles.get(article);
+                    article.setQuantity(article.getQuantity() - ordered);
                 }
-            }
-        });
+                else {
+                    articles.put(article, aad.getAmount());
 
-
-        deleteBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                try{
-                    lblWarning.setText("");
-
-                    Object object = tvArticles.getSelectionModel().getSelectedItems();
-                    String string = object.toString();
-                    String regex = ",";
-                    String[] output = string.split(regex);
-                    String modelComplete = output[3];
-                    String regex1 = "=";
-                    String [] output2 = modelComplete.split(regex1);
-                    String model = output2[1];
-
-                    Article article = db.getArticleByModel(model);
-
-                    if(article != null){
-
-                        articles.remove(article);
-                        tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
-
-                    }else{
-                        lblWarning.setText("You did not choose any item! choose item and then press delete");
-                    }
-                }catch (Exception e){
-                    lblWarning.setText(e.getMessage());
+                    int ordered = articles.get(article);
+                    article.setQuantity(article.getQuantity() - ordered);
                 }
-            }
-        });
-
-        resetBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-
-                customer = null;
-                for (Label l:customersLbl
-                ) {
-                    l.setText("");
-                }
-                articles  = new HashMap<>();
                 fillTableArticles();
             }
         });
 
-        confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        deleteBtn.setOnAction(actionEvent -> {
+            try{
                 lblWarning.setText("");
 
-                if(customer != null && !articles.isEmpty()){
-                    ConfirmOrderDialog cod = new ConfirmOrderDialog(db,customer,articles);
-                    cod.getWindow().showAndWait();
+                Article a = tvArticles.getSelectionModel().getSelectedItem().getKey();
+                int orderedNumber = tvArticles.getSelectionModel().getSelectedItem().getValue();
 
+                if(a != null){
+                    a.setQuantity(a.getQuantity() + orderedNumber);
+                    articles.remove(a);
+                    tvArticles.getItems().removeAll(tvArticles.getSelectionModel().getSelectedItems());
                 }else{
-                    lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
+                    lblWarning.setText("You did not choose any item! choose item and then press delete");
                 }
-
-                customer = null;
-                for (Label l:customersLbl
-                     ) {
-                    l.setText("");
-                }
-                articles  = new HashMap<>();
-                fillTableArticles();
+            }catch (Exception e){
+                lblWarning.setText(e.getMessage());
             }
+        });
+
+        resetBtn.setOnAction(actionEvent -> {
+            customer = null;
+            for (Label l:customersLbl
+            ) {
+                l.setText("");
+            }
+            //if the order is reset to set articles quantity back
+            setOrderedNumberBack();
+
+            articles  = new HashMap<>();
+            fillTableArticles();
+        });
+
+        confirmBtn.setOnAction(actionEvent -> {
+            lblWarning.setText("");
+            if(customer != null && !articles.isEmpty()){
+                ConfirmOrderDialog cod = new ConfirmOrderDialog(db,customer,articles,orderNumber);
+                cod.getWindow().showAndWait();
+
+            }else{
+                lblWarning.setText("the order is not complete! choose a customer and articles and then press confirm");
+                //in case if the customer was not chosen to set articles quantity back
+                setOrderedNumberBack();
+            }
+            customer = null;
+            for (Label l:customersLbl
+            ) {
+                l.setText("");
+            }
+            articles  = new HashMap<>();
+            fillTableArticles();
         });
         buttonsLayout.getChildren().addAll(addBtn,deleteBtn,confirmBtn,resetBtn);
 
@@ -294,19 +274,17 @@ public class CreateOrderScene {
     }
 
     public void fillTableArticles(){
-
         tvArticles.getItems().clear();
         olArticles.clear();
-        for(Map.Entry<Article,Integer> entry : articles.entrySet()) {
-            HashMap<String,Object> mapArticles = new HashMap<>();
-            mapArticles.put("quantity",entry.getValue());
-            mapArticles.put("brand",entry.getKey().getBrand());
-            mapArticles.put("model",entry.getKey().getModel());
-            mapArticles.put("acoustic",entry.getKey().isAcoustic());
-            mapArticles.put("type",entry.getKey().getType());
-            mapArticles.put("price",entry.getKey().getPrice());
-            olArticles.add(mapArticles);
+        olArticles.addAll(articles.entrySet());
+    }
+
+    //if the order is cancelled,reset or was not complete to set the articles quantity back
+    public void setOrderedNumberBack(){
+        for (Map.Entry<Article,Integer> entry:articles.entrySet()
+        ) {
+            int orderedNumber  = entry.getValue();
+            entry.getKey().setQuantity(entry.getKey().getQuantity() + orderedNumber);
         }
-        tvArticles.getItems().addAll(olArticles);
     }
 }

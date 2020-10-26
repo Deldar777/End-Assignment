@@ -1,34 +1,23 @@
 package shekho.com.guitarShopFX.UI.Dialogs;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.*;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Article;
-import shekho.com.guitarShopFX.Models.Customer;
-import shekho.com.guitarShopFX.Models.Order;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import shekho.com.guitarShopFX.Models.*;
+import java.util.*;
 
 public class ConfirmOrderDialog {
 
-    private Stage window;
-
+    private final Stage window;
     public Stage getWindow() {
         return window;
     }
 
-    public ConfirmOrderDialog(Database db, Customer customer, HashMap<Article,Integer> articles){
+    public ConfirmOrderDialog(Database db, Customer customer, HashMap<Article,Integer> articles,int orderNumber){
 
         window = new Stage();
         window.setTitle("GuitarShop FX - Confirm Order");
@@ -74,7 +63,7 @@ public class ConfirmOrderDialog {
 
 
         for (Map.Entry<Article,Integer> entry:articles.entrySet()
-             ) {
+        ) {
 
             totalPrice += entry.getKey().getPrice() * entry.getValue();
             HBox articlesInformationLayout = new HBox();
@@ -100,22 +89,11 @@ public class ConfirmOrderDialog {
 
         Button btnConfirm = new Button("Confirm");
 
-        btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        btnConfirm.setOnAction(actionEvent -> {
 
-                if(customer != null && !articles.isEmpty()){
-
-                    //to adjust the stock
-                    for (Map.Entry<Article,Integer> entry:articles.entrySet()
-                    ) {
-                        entry.getKey().setQuantity(entry.getKey().getQuantity() - entry.getValue());
-                    }
-                    Order order = new Order(customer,articles);
-                    db.setOrders(order);
-                }
-                window.close();
-            }
+            Order order = new Order(customer,articles,orderNumber);
+            db.setOrders(order);
+            window.close();
         });
 
         layout.getChildren().addAll(totalPriceLayout,btnConfirm);

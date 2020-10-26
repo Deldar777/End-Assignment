@@ -1,19 +1,15 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+
+import javafx.collections.*;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.*;
 import shekho.com.guitarShopFX.UI.Dialogs.AddCustomerDialog;
 
 
@@ -21,7 +17,7 @@ import java.util.List;
 
 public class EditCustomerScene {
 
-    private Scene scene;
+    private final Scene scene;
     private List<Customer> customers;
     private ObservableList<Customer> olCustomers;
 

@@ -1,7 +1,6 @@
 package shekho.com.guitarShopFX.UI.Dialogs;
 
 import javafx.collections.*;
-import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -16,11 +15,9 @@ import shekho.com.guitarShopFX.Models.*;
 
 public class AddArticlesDialog {
 
-    private Scene scene;
-    private ObservableList<Article> olArticles;
     private Article article;
     private int amount;
-    private Stage window;
+    private final Stage window;
 
 
     public Stage getWindow() {
@@ -33,7 +30,7 @@ public class AddArticlesDialog {
 
     public AddArticlesDialog(Database db){
 
-        olArticles = FXCollections.observableArrayList(db.getArticles());
+        ObservableList<Article> olArticles = FXCollections.observableArrayList(db.getArticles());
         window = new Stage();
         window.setTitle("GuitarShop FX - Add Article");
         Image image = new Image("resources/css/images/guitarImage.png");
@@ -49,25 +46,21 @@ public class AddArticlesDialog {
         articlesTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
-        TableColumn brandCol = new TableColumn("Brand");
+        TableColumn<Article,String> brandCol = new TableColumn<>("Brand");
         brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(new PropertyValueFactory<Article, String>("brand"));
-
-        TableColumn modelCol = new TableColumn("Model");
+        brandCol.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        TableColumn<Article,String> modelCol = new TableColumn<>("Model");
         modelCol.setMinWidth(100);
-        modelCol.setCellValueFactory(new PropertyValueFactory<Article, String>("Model"));
-
-        TableColumn acousticCol = new TableColumn("Acoustic");
+        modelCol.setCellValueFactory(new PropertyValueFactory<>("Model"));
+        TableColumn<Article,String> acousticCol = new TableColumn<>("Acoustic");
         acousticCol.setMinWidth(100);
-        acousticCol.setCellValueFactory(new PropertyValueFactory<Article, String>("acoustic"));
-
-        TableColumn typeCol = new TableColumn("Type");
+        acousticCol.setCellValueFactory(new PropertyValueFactory<>("acoustic"));
+        TableColumn<Article,String> typeCol = new TableColumn<>("Type");
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new PropertyValueFactory<Article, String>("type"));
-
-        TableColumn priceCol = new TableColumn("Price");
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        TableColumn<Article,String> priceCol = new TableColumn<>("Price");
         priceCol.setMinWidth(100);
-        priceCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("price"));
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         articlesTable.getColumns().addAll(brandCol,modelCol,acousticCol,typeCol,priceCol);
         articlesTable.setItems(olArticles);
@@ -86,43 +79,35 @@ public class AddArticlesDialog {
         Label lblWarning = new Label();
         lblWarning.setId("lblWarning");
 
-        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
+        btnAdd.setOnAction(actionEvent -> {
 
-                try{
+            try{
 
-                    article = articlesTable.getSelectionModel().getSelectedItem();
-                    amount = Integer.parseInt(txtNumbers.getText());
+                article = articlesTable.getSelectionModel().getSelectedItem();
+                amount = Integer.parseInt(txtNumbers.getText());
 
-                    if(article != null){
+                if(article != null){
 
-                        if(amount <= article.getQuantity()){
-                            window.close();
+                    if(amount <= article.getQuantity()){
+                        window.close();
 
-                        }else{
-                            lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "
-                                    +article.getQuantity()+ " remaining");
-                        }
-                    }else {
-                        lblWarning.setText("you did not choose any item! choose item and then press add");
+                    }else{
+                        lblWarning.setText("Not enough for "+ article.getBrand()+" "+article.getModel()+", only "
+                                +article.getQuantity()+ " remaining");
                     }
-                }catch (Exception e){
-                    lblWarning.setText(e.getMessage());
+                }else {
+                    lblWarning.setText("you did not choose any item! choose item and then press add");
                 }
+            }catch (Exception e){
+                lblWarning.setText(e.getMessage());
             }
         });
 
-        btnCancel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                window.close();
-            }
-        });
+        btnCancel.setOnAction(actionEvent -> window.close());
 
         bottom.getChildren().addAll(txtNumbers,btnAdd,btnCancel);
         layout.getChildren().addAll(articlesTable,bottom,lblWarning);
-        scene = new Scene(layout);
+        Scene scene = new Scene(layout);
         scene.getStylesheets().add("resources/css/style.css");
         window.setScene(scene);
     }

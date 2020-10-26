@@ -8,25 +8,40 @@ import java.util.List;
 public class Database {
 
     private List<Order> orders = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private List<Customer> customers = new ArrayList<>();
+    private List<Article> articles = new ArrayList<>();
+
+    private int orderNumber;
+    private int counter = 100;
+
+    public int getOrderNumber() {
+        counter++;
+        orderNumber = counter;
+        return orderNumber;
+    }
 
     public List<Order> getOrders() {
         return orders;
     }
-
+    public List<User> getUsers() {
+        return users;
+    }
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+    public List<Article> getArticles() {
+        return articles;
+    }
     public void setOrders(Order order) {
         orders.add(order);
     }
-
-    private List<User> users = new ArrayList<>();
-    private List<Customer> customers = new ArrayList<>();
-    private List<Article> articles = new ArrayList<>();
 
     public Database(){
         createUsers();
         createCustomers();
         createArticles();
     }
-
 
     private void createUsers(){
         users.add(new User("deldar","deldar777","Deldar",
@@ -50,41 +65,15 @@ public class Database {
                 10,"nbm7563"));
     }
 
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public List<Customer> getCustomers() {
-        return customers;
-    }
-
-    public List<Article> getArticles() {
-        return articles;
-    }
-
+    //if the account exists return a user otherwise null
     public User validateAuthentication(String username,String password){
         User user;
         for (User u:users
         ) {
-
             if (u.getUsername().equals(username)){
                 user = u;
                 if (user.getPassword().equals(password))
                     return user;
-            }
-        }
-        return null;
-    }
-
-    public Article getArticleByModel(String model){
-        Article article;
-
-        for (Article a:articles
-             ) {
-            if (a.getModel().equals(model)){
-                article = a;
-                return  article;
             }
         }
         return null;

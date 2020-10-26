@@ -1,6 +1,7 @@
 package shekho.com.guitarShopFX.Models;
 
 public class User extends Person{
+
     private String username;
     private String password;
     private Role role;
@@ -15,12 +16,8 @@ public class User extends Person{
     public String getUsername() {
         return username;
     }
-
     public String getPassword() {
         return password;
     }
-
-    public Role getRole() {
-        return role;
-    }
+    public Role getRole() { return role; }
 }

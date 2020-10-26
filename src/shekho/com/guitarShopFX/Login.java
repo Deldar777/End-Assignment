@@ -1,17 +1,12 @@
 package shekho.com.guitarShopFX;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.*;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,7 +18,7 @@ public class Login extends Application {
 
     public static void main(String[] args){launch(args);}
     @Override
-    public void start(Stage window) throws Exception {
+    public void start(Stage window) {
 
         try{
             Database db = new Database();
@@ -74,33 +69,30 @@ public class Login extends Application {
             center.add(btnLogin, 1, 3);
             center.add(lblMessage, 1, 4);
 
-            btnLogin.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
+            btnLogin.setOnAction(actionEvent -> {
 
-                    String usernameInput = txtUserName.getText();
-                    String passwordInput = pf.getText();
+                String usernameInput = txtUserName.getText();
+                String passwordInput = pf.getText();
 
-                    if(!usernameInput.isEmpty() && !passwordInput.isEmpty()){
+                if(!usernameInput.isEmpty() && !passwordInput.isEmpty()){
 
-                        User user = db.validateAuthentication(usernameInput,passwordInput);
+                    User user = db.validateAuthentication(usernameInput,passwordInput);
 
-                        if(user != null){
+                    if(user != null){
 
-                            Home home = new Home(db,user);
-                            home.getWindow().initModality(Modality.APPLICATION_MODAL);
-                            home.getWindow().showAndWait();
-                        }else{
-                            lblMessage.setText("The username of the password isn't correct");
-                        }
+                        Home home = new Home(db,user);
+                        home.getWindow().initModality(Modality.APPLICATION_MODAL);
+                        home.getWindow().showAndWait();
                     }else{
-                        lblMessage.setText("don't leave the fields empty!");
+                        lblMessage.setText("The username of the password isn't correct");
                     }
-
-                    txtUserName.setText("");
-                    pf.setText("");
-
+                }else{
+                    lblMessage.setText("don't leave the fields empty!");
                 }
+
+                txtUserName.setText("");
+                pf.setText("");
+
             });
 
            /* User user = new User("ryan","ryan777","Ryan",

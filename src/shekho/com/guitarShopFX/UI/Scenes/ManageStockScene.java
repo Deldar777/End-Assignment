@@ -1,32 +1,25 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
-import javafx.beans.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+
+import javafx.collections.*;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.layout.VBox;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Article;
-import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.*;
 
 public class ManageStockScene {
 
-    private Scene scene;
-    private ObservableList<Article> olArticles;
-
+    private final Scene scene;
     public Scene getScene() {
         return scene;
     }
-
     public ManageStockScene(Database db){
 
-        olArticles = FXCollections.observableArrayList(db.getArticles());
+        ObservableList<Article> olArticles = FXCollections.observableArrayList(db.getArticles());
 
         VBox layout = new VBox();
         layout.setPadding(new Insets(20,20,80,20));
@@ -40,26 +33,21 @@ public class ManageStockScene {
         tbArticles.getSelectionModel().setCellSelectionEnabled(false);
         tbArticles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        TableColumn quantityCol = new TableColumn("Quantity");
+        TableColumn<Article,String> quantityCol = new TableColumn<>("Quantity");
         quantityCol.setMinWidth(100);
-        quantityCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("quantity"));
-
-        TableColumn brandCol = new TableColumn("Brand");
+        quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        TableColumn<Article,String> brandCol = new TableColumn<>("Brand");
         brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(new PropertyValueFactory<Article, String>("brand"));
-
-        TableColumn modelCol = new TableColumn("Model");
+        brandCol.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        TableColumn<Article,String> modelCol = new TableColumn<>("Model");
         modelCol.setMinWidth(100);
-        modelCol.setCellValueFactory(new PropertyValueFactory<Article, String>("model"));
-
-        TableColumn acousticCol = new TableColumn("Acoustic");
+        modelCol.setCellValueFactory(new PropertyValueFactory<>("model"));
+        TableColumn<Article,String> acousticCol = new TableColumn<>("Acoustic");
         acousticCol.setMinWidth(100);
-        acousticCol.setCellValueFactory(new PropertyValueFactory<Article, String>("acoustic"));
-
-        TableColumn typeCol = new TableColumn("Guitar Type");
+        acousticCol.setCellValueFactory(new PropertyValueFactory<>("acoustic"));
+        TableColumn<Article,String> typeCol = new TableColumn<>("Guitar Type");
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new PropertyValueFactory<Article, String>("type"));
-
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         tbArticles.getColumns().addAll(quantityCol,brandCol,modelCol,acousticCol,typeCol);
         tbArticles.setItems(olArticles);
@@ -76,37 +64,30 @@ public class ManageStockScene {
 
         bottomLayout.getChildren().addAll(txtQuantity,rbtnNegate,btnAdd);
 
+        btnAdd.setOnAction(actionEvent -> {
+            Article a = tbArticles.getSelectionModel().getSelectedItem();
 
-        btnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Article a = tbArticles.getSelectionModel().getSelectedItem();
+            if(a != null){
+                try{
+                    int newNumber = Integer.parseInt(txtQuantity.getText());
 
-                if(a != null){
-                    try{
-                        int newNumber = Integer.parseInt(txtQuantity.getText());
+                    if(rbtnNegate.isSelected()){
 
-                        if(rbtnNegate.isSelected()){
-
-                            if(a.getQuantity() - newNumber >= 0){
-                                a.setQuantity(a.getQuantity() - newNumber);
-                            }else{
-                                lblWarning.setText("We have only "+a.getQuantity() + " in stock for "+a.getModel());
-                            }
+                        if(a.getQuantity() - newNumber >= 0){
+                            a.setQuantity(a.getQuantity() - newNumber);
                         }else{
-                            a.setQuantity(a.getQuantity() + newNumber);
+                            lblWarning.setText("We have only "+a.getQuantity() + " in stock for "+a.getModel());
                         }
-
-                    }catch (Exception e){
-                        lblWarning.setText(e.getMessage());
+                    }else{
+                        a.setQuantity(a.getQuantity() + newNumber);
                     }
-
-                }else {
-                    lblWarning.setId("You did not choose any item! first choose item and then press add");
+                }catch (Exception e){
+                    lblWarning.setText(e.getMessage());
                 }
-
-                tbArticles.refresh();
+            }else {
+                lblWarning.setText("You did not choose any item! first choose item and then press add");
             }
+            tbArticles.refresh();
         });
 
         layout.getChildren().addAll(lblStockMaintenance,tbArticles,bottomLayout,lblWarning);

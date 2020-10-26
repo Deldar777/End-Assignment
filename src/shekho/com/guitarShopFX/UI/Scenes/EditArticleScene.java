@@ -1,25 +1,21 @@
 package shekho.com.guitarShopFX.UI.Scenes;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.collections.*;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import shekho.com.guitarShopFX.DAL.Database;
-import shekho.com.guitarShopFX.Models.Article;
-import shekho.com.guitarShopFX.Models.Customer;
+import shekho.com.guitarShopFX.Models.*;
 import shekho.com.guitarShopFX.UI.Dialogs.CreateArticlesDialog;
 
 import java.util.List;
 
 public class EditArticleScene {
 
-    private Scene scene;
+    private final Scene scene;
     private List<Article> articles;
     private ObservableList<Article> olArticles;
 
@@ -45,25 +41,21 @@ public class EditArticleScene {
         tvArticles.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
 
-        TableColumn brandCol = new TableColumn("Brand");
+        TableColumn<Article,String> brandCol = new TableColumn<>("Brand");
         brandCol.setMinWidth(100);
-        brandCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("brand"));
-
-        TableColumn modelCol = new TableColumn("Model");
+        brandCol.setCellValueFactory(new PropertyValueFactory<>("brand"));
+        TableColumn<Article,String> modelCol = new TableColumn<>("Model");
         modelCol.setMinWidth(100);
-        modelCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("model"));
-
-        TableColumn acousticCol = new TableColumn("Acoustic");
+        modelCol.setCellValueFactory(new PropertyValueFactory<>("model"));
+        TableColumn<Article,String> acousticCol = new TableColumn<>("Acoustic");
         acousticCol.setMinWidth(100);
-        acousticCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("acoustic"));
-
-        TableColumn typeCol = new TableColumn("Type");
+        acousticCol.setCellValueFactory(new PropertyValueFactory<>("acoustic"));
+        TableColumn<Article,String> typeCol = new TableColumn<>("Type");
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("type"));
-
-        TableColumn priceCol = new TableColumn("Price");
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        TableColumn<Article,String> priceCol = new TableColumn<>("Price");
         priceCol.setMinWidth(100);
-        priceCol.setCellValueFactory(new PropertyValueFactory<Customer, String>("price"));
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
 
         tvArticles.getColumns().addAll(brandCol,modelCol,acousticCol,typeCol,priceCol);
         tvArticles.setItems(olArticles);

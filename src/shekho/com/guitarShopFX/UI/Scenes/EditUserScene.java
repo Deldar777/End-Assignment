@@ -15,7 +15,7 @@ import java.util.List;
 
 public class EditUserScene {
 
-    private Scene scene;
+    private final Scene scene;
     private List<User> users;
     private ObservableList<User> olUsers;
 
